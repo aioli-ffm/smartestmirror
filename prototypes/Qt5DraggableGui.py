@@ -7,11 +7,7 @@ from PyQt5.QtGui import *
 import sys
 import datetime
 
-class Button(QPushButton):
-    def __init__(self, title, parent):
-        super().__init__(title, parent)
-        self.parent = parent
-        
+class MyBase(object):
     def mouseMoveEvent(self, e):
         if e.buttons() != Qt.RightButton:
             return
@@ -24,14 +20,9 @@ class Button(QPushButton):
         drag.setHotSpot(e.pos() - self.rect().topLeft())
 
         dropAction = drag.exec_(Qt.MoveAction)
-
-    def mousePressEvent(self, e):
-        super().mousePressEvent(e)
         
-        if e.button() == Qt.LeftButton:
-            print('press')
 
-class Text(QLabel):
+class TimerText(QLabel,MyBase):
     def __init__(self, title, parent):
         super().__init__(title,parent)
         self.parent = parent
@@ -44,33 +35,11 @@ class Text(QLabel):
         f = self.font()
         m = QFontMetrics(f)
         size = m.size(0, self.text())
-        print(size.width())
-        #self.resize(size.width(), size.height())
-        #self.setGeometry(self.x(), self.y(), size.width(), size.height())
         self.setFixedSize(size.width(), size.height())
 
-
-        #self.adjustSize()
-        #self.updateGeometry()
-        #self.parent.updateGeometry()
-
     def update(self):
-        print("Update called")
-        print(str(datetime.datetime.now().time()))
         self.settext(str(datetime.datetime.now().time()))
 
-    def mouseMoveEvent(self, e):
-        if e.buttons() != Qt.RightButton:
-            return
-
-        mimeData = QMimeData()
-
-        self.parent.current_drag = self
-        drag = QDrag(self)
-        drag.setMimeData(mimeData)
-        drag.setHotSpot(e.pos() - self.rect().topLeft())
-
-        dropAction = drag.exec_(Qt.MoveAction)
 
 
 class Canvas(QWidget):
@@ -90,10 +59,7 @@ class Canvas(QWidget):
         self.setPalette(p)
 
         # add elements to canvas
-        self.button = Button('Button', self)
-        self.button.move(100, 65)
-
-        self.text_time = Text('Timer', self)
+        self.text_time = TimerText('Timer', self)
         self.text_time.settext("Test")
         self.text_time.move(500,200)
 
