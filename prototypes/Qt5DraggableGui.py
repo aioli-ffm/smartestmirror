@@ -4,43 +4,13 @@
 from PyQt5.QtWidgets import * 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import configparser
 import sys
 import datetime
 
-class MyBase(object):
-    def mouseMoveEvent(self, e):
-        if e.buttons() != Qt.RightButton:
-            return
-
-        mimeData = QMimeData()
-
-        self.parent.current_drag = self
-        drag = QDrag(self)
-        drag.setMimeData(mimeData)
-        drag.setHotSpot(e.pos() - self.rect().topLeft())
-
-        dropAction = drag.exec_(Qt.MoveAction)
-        
-
-class TimerText(QLabel,MyBase):
-    def __init__(self, title, parent):
-        super().__init__(title,parent)
-        self.parent = parent
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-
-    def settext(self,text):
-        self.setText(text)
-        self.setStyleSheet("color: rgb(255,255,255);")
-
-        f = self.font()
-        m = QFontMetrics(f)
-        size = m.size(0, self.text())
-        self.setFixedSize(size.width(), size.height())
-
-    def update(self):
-        self.settext(str(datetime.datetime.now().time()))
-
-
+import widgets
+#from widgets import *
+#from widgets.TimerText import TimerText
 
 class Canvas(QWidget):
     def __init__(self):
@@ -58,16 +28,48 @@ class Canvas(QWidget):
         p.setColor(self.backgroundRole(), Qt.black)
         self.setPalette(p)
 
-        # add elements to canvas
-        self.text_time = TimerText('Timer', self)
-        self.text_time.settext("Test")
-        self.text_time.move(500,200)
+        self.getWidgets()
 
-        # set timers for update functions
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.text_time.update)
-        self.timer.start(1000)
 
+    def getWidgets(self):
+        """ 
+        parse available widgets,
+        only add those that have a config section
+        TODO: add some install routine for widgets that automatically create this config section!
+        """
+        self.widgets = []
+        self.timers = []
+
+        import importlib
+        import pkgutil
+        config = configparser.ConfigParser()
+        config.read("config.ini")
+
+        for importer,modname,ispkg in pkgutil.iter_modules(widgets.__path__):
+            if modname != "Base":
+                print("Found widget %s" % modname)
+                # check if this module has a config-section
+                if config.has_section(modname):
+                    # import the module
+                    mod = importlib.import_module("widgets."+modname)
+                    # instantiate the widget
+                    class_ = getattr(mod, modname)
+                    instance = class_("TimerText",self)
+                    instance.update()
+                    # move to position
+                    try:
+                        instance.move(int(config[modname]['x']),int(config[modname]['y']))
+                    except Exception as e:
+                        print("No position info for module %s"%modname)
+                        print("Exception: ", e)
+                    self.widgets.append(instance)
+                    # setup the update functions
+                    timer = QTimer()
+                    timer.timeout.connect(instance.update)
+                    timer.start(int(config[modname]['Interval']))
+                    self.timers.append(timer)
+                    for opt in config.options(modname):
+                        print("\t%s:%s"%(opt, config[modname][opt]))
 
     def dragEnterEvent(self, e):
         e.accept()
