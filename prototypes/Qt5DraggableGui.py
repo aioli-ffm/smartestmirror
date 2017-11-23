@@ -1,10 +1,10 @@
-#!/usr/bin/python3
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
 from PyQt5.QtWidgets import * 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import configparser
+import ConfigParser
 import sys
 import datetime
 
@@ -14,8 +14,8 @@ import widgets
 
 class Canvas(QWidget):
     def __init__(self):
-        super().__init__()
-        self.config = configparser.ConfigParser()
+        super(Canvas,self).__init__()
+        self.config = ConfigParser.ConfigParser()
         self.config.read("config.ini")
 
         self.initUI()
@@ -68,10 +68,10 @@ class Canvas(QWidget):
                     # setup the update functions
                     timer = QTimer()
                     timer.timeout.connect(instance.update)
-                    timer.start(int(self.config[modname]['Interval'])*1000) # from s to Ms for the timer
+                    timer.start(self.config.getfloat(modname,'Interval')*1000) # from s to Ms for the timer
                     self.timers.append(timer)
                     for opt in self.config.options(modname):
-                        print("\t%s:%s"%(opt, self.config[modname][opt]))
+                        print("\t%s:%s"%(opt, self.config.get(modname,opt)))
 
     def dragEnterEvent(self, e):
         e.accept()

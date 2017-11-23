@@ -15,7 +15,7 @@ class TimerText(QLabel,Base):
     Display time and date
     """
     def __init__(self, title, parent):
-        super().__init__(title,parent)
+        super(TimerText,self).__init__(title,parent)
         self.parent = parent
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAlignment(Qt.AlignCenter)

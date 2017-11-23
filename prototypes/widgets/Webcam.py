@@ -18,12 +18,9 @@ class Webcam(QLabel,Base):
     Get webcam images, process and display them
     """
     def __init__(self, title, parent):
-        super().__init__(title,parent)
+        super(Webcam,self).__init__(title,parent)
         self.parent = parent
-        self.capture = cv2.VideoCapture('/dev/video0')
-
-        self.capture.set(3,640)
-        self.capture.set(4,480)
+        self.capture = cv2.VideoCapture(-1)
 
     def setimg(self,img):
         img = np.require(img, np.uint8, 'C')

@@ -17,7 +17,7 @@ class Bitcoin(QLabel,Base):
     Display time and date
     """
     def __init__(self, title, parent):
-        super().__init__(title,parent)
+        super(Bitcoin, self).__init__(title,parent)
         self.parent = parent
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAlignment(Qt.AlignCenter)
@@ -40,5 +40,5 @@ class Bitcoin(QLabel,Base):
         updated = r.json()['time']['updated']
         price = r.json()['bpi']['EUR']['rate_float']
 
-        dstr = "%.2f € (%s)" % (price, updated)
+        dstr = "%.2f EUR (%s)" % (price, updated)
         self.settext(dstr)
