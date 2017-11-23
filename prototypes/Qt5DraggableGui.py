@@ -68,7 +68,7 @@ class Canvas(QWidget):
                     # setup the update functions
                     timer = QTimer()
                     timer.timeout.connect(instance.update)
-                    timer.start(int(self.config[modname]['Interval']))
+                    timer.start(int(self.config[modname]['Interval'])*1000) # from s to Ms for the timer
                     self.timers.append(timer)
                     for opt in self.config.options(modname):
                         print("\t%s:%s"%(opt, self.config[modname][opt]))
