@@ -8,3 +8,9 @@ and add a section in the config.ini file for interval and screen-position.
 ## TODO
 
 * User profiles
+
+## Current state
+
+Try to update this picture regularly :)
+
+![GUI](../doc/gui.png)
