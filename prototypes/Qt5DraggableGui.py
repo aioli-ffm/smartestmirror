@@ -15,15 +15,19 @@ import widgets
 class Canvas(QWidget):
     def __init__(self):
         super().__init__()
+        self.config = configparser.ConfigParser()
+        self.config.read("config.ini")
+
         self.initUI()
         self.current_drag = None
+
         
     def initUI(self):
         self.setAcceptDrops(True)
 
         # create window, geometry and colors
         self.setWindowTitle('Smartestmirror')
-        self.setGeometry(0, 0, 1920, 1080)
+        self.setGeometry(0, 0, self.config.getint("Display","w"), self.config.getint("Display","h"))
         p = self.palette()
         p.setColor(self.backgroundRole(), Qt.black)
         self.setPalette(p)
@@ -42,14 +46,12 @@ class Canvas(QWidget):
 
         import importlib
         import pkgutil
-        config = configparser.ConfigParser()
-        config.read("config.ini")
 
         for importer,modname,ispkg in pkgutil.iter_modules(widgets.__path__):
             if modname != "Base":
                 print("Found widget %s" % modname)
                 # check if this module has a config-section
-                if config.has_section(modname):
+                if self.config.has_section(modname):
                     # import the module
                     mod = importlib.import_module("widgets."+modname)
                     # instantiate the widget
@@ -58,7 +60,7 @@ class Canvas(QWidget):
                     instance.update()
                     # move to position
                     try:
-                        instance.move(int(config[modname]['x']),int(config[modname]['y']))
+                        instance.move(self.config.getint(modname,'x'),self.config.getint(modname,'y'))
                     except Exception as e:
                         print("No position info for module %s"%modname)
                         print("Exception: ", e)
@@ -66,10 +68,10 @@ class Canvas(QWidget):
                     # setup the update functions
                     timer = QTimer()
                     timer.timeout.connect(instance.update)
-                    timer.start(int(config[modname]['Interval']))
+                    timer.start(int(self.config[modname]['Interval']))
                     self.timers.append(timer)
-                    for opt in config.options(modname):
-                        print("\t%s:%s"%(opt, config[modname][opt]))
+                    for opt in self.config.options(modname):
+                        print("\t%s:%s"%(opt, self.config[modname][opt]))
 
     def dragEnterEvent(self, e):
         e.accept()
