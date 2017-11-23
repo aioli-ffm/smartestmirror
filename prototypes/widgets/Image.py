@@ -6,7 +6,6 @@ author: Tobias Weis
 from PyQt5.QtWidgets import * 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PIL import Image, ImageQt
 import datetime
 import calendar
 import cv2

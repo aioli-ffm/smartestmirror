@@ -6,7 +6,6 @@ import cv2
 from PyQt5.QtWidgets import * 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PIL import Image, ImageQt
 import datetime
 import calendar
 import numpy as np
@@ -20,7 +19,8 @@ class Webcam(QLabel,Base):
     def __init__(self, title, parent):
         super(Webcam,self).__init__(title,parent)
         self.parent = parent
-        self.capture = cv2.VideoCapture(-1)
+
+        self.capture = cv2.VideoCapture(1)
 
     def setimg(self,img):
         img = np.require(img, np.uint8, 'C')
