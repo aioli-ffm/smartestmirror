@@ -7,6 +7,9 @@ from PyQt5.QtGui import *
 import ConfigParser
 import sys
 import datetime
+import cec
+import time
+import serial
 
 import widgets
 #from widgets import *
@@ -21,6 +24,22 @@ class Canvas(QWidget):
         self.initUI()
         self.current_drag = None
 
+	self.ser = serial.Serial()
+	self.ser.baudrate = 9600
+	self.ser.port = '/dev/arduino_motionsensor'
+	self.ser.open()
+
+	cec.init()
+	self.tv = cec.Device(cec.CECDEVICE_TV)
+
+	self.last_move = 0
+	self.state = 0
+
+	# add timer to periodically check the motionsensor
+	self.timer = QTimer()
+	self.timer.timeout.connect(self.checkMotion)
+	self.timer.start(5) # from s to Ms for the timer
+
         
     def initUI(self):
         self.setAcceptDrops(True)
@@ -33,6 +52,27 @@ class Canvas(QWidget):
         self.setPalette(p)
 
         self.getWidgets()
+
+    def checkMotion(self):
+	"""
+	read the serial motion sensor, turn on and off the TV and the widget-timers
+	"""
+	res = self.ser.readline()
+	try:
+		if self.state == 1 and time.time() - self.last_move > 10*60: # FIXME: hardcoded keep-on-time
+		    print "Turning off"
+		    self.tv.standby()
+		    self.state = 0
+
+		if not "0" in res:
+		    self.last_move = time.time()
+
+		if "0" not in res and self.state == 0:
+		    self.state = 1
+		    self.tv.power_on()
+		    print "Turning on"
+	except Exception as e:
+		print "Exception: ", e
 
 
     def getWidgets(self):

@@ -33,7 +33,6 @@ class Webcam(QLabel,Base):
         #img = np.zeros((100,200,3), np.uint8) + [255,255,255]
         ret,img = self.capture.read()
         if img is not None:
-            print(img.shape)
             #img = cv2.imread("brain.jpg")
             self.setimg(img)
         else:
