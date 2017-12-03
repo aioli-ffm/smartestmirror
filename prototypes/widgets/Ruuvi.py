@@ -38,6 +38,7 @@ class Ruuvi(QLabel,Base):
             humidity = datas[list(datas)[0]]['humidity']
             temperature = datas[list(datas)[0]]['temperature']
             pressure = datas[list(datas)[0]]['pressure']
-            self.settext("humidity: " + str(humidity) + " %\n" + "temperature: " + str(temperature) + " °C\n" + "pressure: " + str(pressure) + " hPa")
+            self.settext("humidity: " + str(humidity) + " %\n" + "temperature: " + str(temperature) + " C\n" + "pressure: " + str(pressure) + " hPa")
         except:
+            print("error reading ruvi")
             pass
