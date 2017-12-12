@@ -19,6 +19,7 @@ class MotionSensor(Base):
         self.ser.baudrate = 9600
         self.ser.port = '/dev/arduino_motionsensor'
         self.ser.open()
+        self.callback = None
 
     def run(self):
         self.checkMotion()
@@ -42,6 +43,11 @@ class MotionSensor(Base):
 
     def execOn(self):
         self.state = 1
+        self.callback(self.state)
 
     def execOff(self):
         self.state = 0
+        self.callback(self.state)
+
+    def addCallback(self, callback):
+        self.callback = callback
