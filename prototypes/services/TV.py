@@ -8,7 +8,8 @@ from services.Base import *
 
 class TV(Base):
 
-    def __init__(self):
+    def __init__(self, serviceRunner):
+        super(TV, self).__init__(serviceRunner)
         self.init()
 
     def init(self):

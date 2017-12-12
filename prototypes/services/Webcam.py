@@ -7,7 +7,8 @@ from services.Base import *
 
 class Webcam(Base):
 
-    def __init__(self):
+    def __init__(self, serviceRunner):
+        super(Webcam, self).__init__(serviceRunner)
         self.init()
 
     def init(self):

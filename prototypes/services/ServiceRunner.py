@@ -12,7 +12,7 @@ class ServiceRunner(object):
         pass
 
     def loadServices(self):
-        self.widgets = []
+        self.services = []
         self.timers = []
 
         import importlib
@@ -21,3 +21,7 @@ class ServiceRunner(object):
         for importer,modname,ispkg in pkgutil.iter_modules('.'):
             if modname != "Base":
                 print("Found service %s" % modname)
+                mod = importlib.import_module("services."+modname)
+                class_ = getattr(mod, modname)
+                instance = class_()
+                instance.init()

@@ -9,7 +9,8 @@ from services.Base import *
 
 class MotionSensor(Base):
 
-    def __init__(self):
+    def __init__(self, serviceRunner):
+        super(MotionSensor, self).__init__(serviceRunner)
         self.init()
 
     def init(self):
