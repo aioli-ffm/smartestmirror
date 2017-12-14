@@ -6,7 +6,7 @@ author: Christian M
 class ServiceRunner(object):
 
     def init(self):
-        pass
+        self.loadServices()
 
     def run(self):
         pass
@@ -18,10 +18,11 @@ class ServiceRunner(object):
         import importlib
         import pkgutil
 
-        for importer,modname,ispkg in pkgutil.iter_modules('.'):
+        for importer,modname,ispkg in pkgutil.iter_modules('services'):
             if modname != "Base":
                 print("Found service %s" % modname)
                 mod = importlib.import_module("services."+modname)
                 class_ = getattr(mod, modname)
-                instance = class_()
+                instance = class_(self)
                 instance.init()
+                self.services.append(instance)
