@@ -4,21 +4,25 @@ author: Christian M
 '''
 import serial
 import time
-import services.Base
+from services.Base import *
 
-class MotionSensor(services.Base):
+class MotionSensor(Base):
 
     def __init__(self, serviceRunner):
         super(MotionSensor, self).__init__(serviceRunner)
         self.init()
 
     def init(self):
+        self.config = self.defaultConfig()
         self.last_move = 0
         self.state = 0
         self.ser = serial.Serial()
         self.ser.baudrate = 9600
         self.ser.port = '/dev/arduino_motionsensor'
-        self.ser.open()
+        try:
+            self.ser.open()
+        except:
+            print("Serial port not usable")
         self.callbacks = []
 
     def run(self):
