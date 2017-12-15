@@ -3,7 +3,7 @@
 author: Christian M
 '''
 from abc import abstractmethod
-import Configurateable
+from Configurateable import *
 
 class Base(Configurateable):
 

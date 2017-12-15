@@ -4,10 +4,9 @@ author: Christian M
 '''
 import serial
 import time
-from services.Base import *
+import services.Base
 
-
-class MotionSensor(Base):
+class MotionSensor(services.Base):
 
     def __init__(self, serviceRunner):
         super(MotionSensor, self).__init__(serviceRunner)

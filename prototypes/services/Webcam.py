@@ -11,6 +11,9 @@ class Webcam(Base):
         super(Webcam, self).__init__(serviceRunner)
         self.init()
 
+    def defaultConfig(self):
+        return {"x":0, "y":0, "Interval":1, "resx":640, "resy":480}
+
     def init(self):
         self.capture = cv2.VideoCapture(0)
         self.image = None

@@ -4,9 +4,9 @@ author: Christian M
 '''
 import time
 import cec
-from services.Base import *
+import services.Base
 
-class TV(Base):
+class TV(services.Base):
 
     def __init__(self, serviceRunner):
         super(TV, self).__init__(serviceRunner)
