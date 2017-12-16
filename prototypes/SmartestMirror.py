@@ -7,14 +7,18 @@ import sys
 from PyQt5.QtWidgets import * 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from services import ServiceRunner
+import ServiceRunner
+import WidgetRunner
 
 class SmartestMirror(QWidget):
     def __init__(self):
         super(SmartestMirror,self).__init__()
+        self.initUI()
+        
         self.serviceRunner = ServiceRunner.ServiceRunner()
         self.serviceRunner.init()
-        self.initUI()
+        self.widgetRunner = WidgetRunner.WidgetRunner(self, self.serviceRunner)
+        self.widgetRunner.init()
 
     def initUI(self):
         self.setAcceptDrops(True)

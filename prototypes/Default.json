@@ -1,0 +1,21 @@
+{
+    "MotionSensor": {
+        "y": 0,
+        "x": 0,
+        "Interval": 1
+    },
+    "Webcam": {
+        "y": 0,
+        "x": 0,
+        "resx": 640,
+        "Interval": 1,
+        "resy": 480
+    },
+    "Display": {
+        "y": 0,
+        "x": 0,
+        "w": 1920,
+        "Interval": 10000,
+        "h": 1080
+    }
+}

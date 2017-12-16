@@ -19,8 +19,8 @@ class Webcam(QLabel,Base):
     def __init__(self, title, parent, serviceRunner):
         super(Webcam,self).__init__(title,parent)
         self.parent = parent
-
-        self.capture = cv2.VideoCapture(1)
+        self.config = None
+        self.capture = cv2.VideoCapture(0)
 
     def setimg(self,img):
         img = np.require(img, np.uint8, 'C')

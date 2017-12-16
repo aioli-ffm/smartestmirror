@@ -21,7 +21,10 @@ class Config(object):
         with open(file, 'r') as infile:
             data = json.load(infile)
             for configurateable in configurateables:
-                configurateable.config = data[configurateable.__class__.__name__]
+                if data.get(configurateable.__class__.__name__):
+                    configurateable.config = data.get(configurateable.__class__.__name__)
+                else:
+                    configurateable.config = configurateable.defaultConfig()
 
     def fromJSON(self, configurateable, jsonstr):
         configurateable.config = json.loads(jsonstr)
