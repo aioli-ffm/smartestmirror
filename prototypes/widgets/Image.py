@@ -16,7 +16,7 @@ class Image(QLabel,Base):
     """
     Display time and date
     """
-    def __init__(self, title, parent):
+    def __init__(self, title, parent, serviceRunner):
         super(Image,self).__init__(title,parent)
         self.parent = parent
         #self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)

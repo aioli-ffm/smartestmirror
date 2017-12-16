@@ -1,6 +1,12 @@
 import unittest
 from services import Webcam, MotionSensor
+from widgets import Bitcoin
 import Config
+import ServiceRunner, WidgetRunner
+
+import sys
+from PyQt5.QtWidgets import * 
+from PyQt5.QtCore import *
 
 class TestConfigMethods(unittest.TestCase):
 
@@ -29,6 +35,20 @@ class TestConfigMethods(unittest.TestCase):
         configurateables.append(motion)
         config.load(configurateables, "test.json")
         print(webcam.config)
+
+class TestWidgets(unittest.TestCase):
+
+    def test_bitcoin(self):
+        app = QApplication(sys.argv)
+        serviceRunner = ServiceRunner.ServiceRunner()
+        serviceRunner.init()
+        print(serviceRunner.services)
+        widgetRunner = WidgetRunner.WidgetRunner(parent=None, serviceRunner=serviceRunner)
+        widgetRunner.init()
+        bitcoin = widgetRunner.widgets["Bitcoin"]
+        print(bitcoin.config["Currency"])
+    def test_widgetsrunner(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

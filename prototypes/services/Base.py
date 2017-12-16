@@ -7,8 +7,8 @@ from Configurateable import *
 
 class Base(Configurateable):
 
-    def __init__(self, serviceRunner):
-        self.serviceRunner = serviceRunner
+    def __init__(self):
+        self.serviceRunner = None
 
     @classmethod
     @abstractmethod

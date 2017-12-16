@@ -12,7 +12,7 @@ class GpuInfoText(QLabel,Base):
     """
     Display GPU Temperature
     """
-    def __init__(self, title, parent):
+    def __init__(self, title, parent, serviceRunner):
         super(GpuInfoText,self).__init__(title,parent)
         self.parent = parent
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)

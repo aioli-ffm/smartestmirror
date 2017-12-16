@@ -12,17 +12,20 @@ from widgets.Base import *
 import json
 import requests
 
-class Bitcoin(QLabel,Base):
+class Bitcoin(QLabel, Base):
     """
-    Display time and date
+    Display Bitcoin
     """
-    def __init__(self, title, parent):
-        super(Bitcoin, self).__init__(title,parent)
+    def __init__(self, title, parent, serviceRunner):
+        super(Bitcoin, self).__init__(title, parent)
         self.parent = parent
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAlignment(Qt.AlignCenter)
         self.setStyleSheet("color: rgb(255,255,255);")
+        self.config = self.defaultConfig()
 
+    def defaultConfig(self):
+        return {"x":50, "y":900, "Interval":600, "Currency":"EUR"}
 
     def settext(self,text):
         self.setText(text)
@@ -38,7 +41,7 @@ class Bitcoin(QLabel,Base):
         r = requests.get('https://api.coindesk.com/v1/bpi/currentprice.json')
 
         updated = r.json()['time']['updated']
-        price = r.json()['bpi']['EUR']['rate_float']
+        price = r.json()['bpi'][self.config["Currency"]]['rate_float']
 
         dstr = "%.2f EUR (%s)" % (price, updated)
         self.settext(dstr)

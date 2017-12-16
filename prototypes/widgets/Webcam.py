@@ -16,7 +16,7 @@ class Webcam(QLabel,Base):
     """
     Get webcam images, process and display them
     """
-    def __init__(self, title, parent):
+    def __init__(self, title, parent, serviceRunner):
         super(Webcam,self).__init__(title,parent)
         self.parent = parent
 

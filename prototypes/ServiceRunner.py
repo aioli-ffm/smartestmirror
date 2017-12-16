@@ -2,6 +2,10 @@
 '''
 author: Christian M
 '''
+import importlib
+import pkgutil
+import services
+
 
 class ServiceRunner(object):
 
@@ -14,11 +18,7 @@ class ServiceRunner(object):
     def loadServices(self):
         self.services = []
         self.timers = []
-
-        import importlib
-        import pkgutil
-
-        for importer,modname,ispkg in pkgutil.iter_modules('services'):
+        for importer,modname,ispkg in pkgutil.iter_modules(services.__path__):
             if modname != "Base":
                 print("Found service %s" % modname)
                 mod = importlib.import_module("services."+modname)
