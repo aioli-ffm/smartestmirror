@@ -20,7 +20,7 @@ class Base(Configurateable):
 
     @classmethod
     @abstractmethod
-    def run(self):
+    def update(self):
         pass
 
     """ 

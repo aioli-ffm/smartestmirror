@@ -13,7 +13,7 @@ class Display(QLabel, Base):
     Display
     """
     def __init__(self, title, parent, serviceRunner):
-        #super(Bitcoin, self).__init__(title, parent)
+        super(Display, self).__init__(title, parent)
         self.parent = parent
         self.config = self.defaultConfig()
 

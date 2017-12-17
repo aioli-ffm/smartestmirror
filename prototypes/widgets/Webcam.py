@@ -27,6 +27,7 @@ class Webcam(QLabel,Base):
         qimg = QImage(img.data, img.shape[1], img.shape[0], img.strides[0], QImage.Format_RGB888)
         pixmap = QPixmap.fromImage(qimg)
         self.setPixmap(pixmap)
+        self.setFixedSize(pixmap.width(), pixmap.height())
 
     def update(self):
         # create a pretty timestring

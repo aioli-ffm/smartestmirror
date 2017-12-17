@@ -26,6 +26,16 @@ class Config(object):
                 else:
                     configurateable.config = configurateable.defaultConfig()
 
+    def isEnabled(self, configurateable, file):
+        data = {}
+        with open(file, 'r') as infile:
+            data = json.load(infile)
+            if data.get(configurateable.__class__.__name__):
+                return True
+            else:
+                return False
+        return False
+
     def fromJSON(self, configurateable, jsonstr):
         configurateable.config = json.loads(jsonstr)
 

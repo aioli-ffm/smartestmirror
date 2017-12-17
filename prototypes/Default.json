@@ -1,21 +1,42 @@
 {
     "MotionSensor": {
-        "y": 0,
         "x": 0,
+        "y": 0,
         "Interval": 1
     },
     "Webcam": {
-        "y": 0,
-        "x": 0,
+        "x": 1300,
+        "y": 20,
         "resx": 640,
-        "Interval": 1,
+        "Interval": 0.1,
         "resy": 480
     },
     "Display": {
-        "y": 0,
         "x": 0,
+        "y": 0,
         "w": 1920,
-        "Interval": 10000,
+        "Interval": 100,
         "h": 1080
+    },
+    "GpuInfoText": {
+        "x": 500,
+        "y": 20,
+        "Interval": 10
+    },
+    "Image": {
+        "x": 1300,
+        "y": 20,
+        "Interval": 6000
+    },
+    "TimerText": {
+        "x": 800,
+        "y": 200,
+        "Interval": 1
+    },
+    "Bitcoin": {
+        "x": 50,
+        "y": 900,
+        "Interval": 600,
+        "Currency": "EUR"
     }
 }
