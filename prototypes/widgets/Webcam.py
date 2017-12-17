@@ -18,23 +18,19 @@ class Webcam(QLabel,Base):
     """
     def __init__(self, title, parent, serviceRunner):
         super(Webcam,self).__init__(title,parent)
+        self.serviceRunner = serviceRunner
         self.parent = parent
-        self.config = None
-        self.capture = cv2.VideoCapture(0)
 
     def setimg(self,img):
         img = np.require(img, np.uint8, 'C')
         qimg = QImage(img.data, img.shape[1], img.shape[0], img.strides[0], QImage.Format_RGB888)
         pixmap = QPixmap.fromImage(qimg)
         self.setPixmap(pixmap)
-        self.setFixedSize(pixmap.width(), pixmap.height())
+        #self.setFixedSize(pixmap.width(), pixmap.height())
 
     def update(self):
-        # create a pretty timestring
-        #img = np.zeros((100,200,3), np.uint8) + [255,255,255]
-        ret,img = self.capture.read()
+        img = self.serviceRunner.get("Webcam").currentImage()
         if img is not None:
-            #img = cv2.imread("brain.jpg")
             self.setimg(img)
         else:
             print("None")

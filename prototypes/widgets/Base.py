@@ -11,6 +11,7 @@ from PyQt5.QtGui import *
 
 class Base(Configurateable):
     def __init__(self):
+        super(Base, self).__init__()
         self.serviceRunner = None
 
     @classmethod

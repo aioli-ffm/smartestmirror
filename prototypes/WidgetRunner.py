@@ -25,9 +25,6 @@ class WidgetRunner(object):
         self.initWidgets()
         self.startWidgets()
 
-    def run(self):
-        pass
-
     def loadWidgets(self):
         for importer,modname,ispkg in pkgutil.iter_modules(widgets.__path__):
             if modname != "Base":
@@ -35,9 +32,7 @@ class WidgetRunner(object):
                 mod = importlib.import_module("widgets."+modname)
                 class_ = getattr(mod, modname)
                 instance = class_(title=modname, parent=self.parent, serviceRunner=self.serviceRunner)
-                self.widgets[modname] = instance
-
-                
+                self.widgets[modname] = instance    
 
     def configWidgets(self):
         self.config.load(self.widgets.values(), "Default.json")

@@ -10,7 +10,6 @@ class Webcam(Base):
     def __init__(self, serviceRunner):
         super(Webcam, self).__init__()
         self.serviceRunner = serviceRunner
-        self.init()
 
     def defaultConfig(self):
         return {"x":0, "y":0, "Interval":1, "resx":640, "resy":480}
@@ -19,7 +18,7 @@ class Webcam(Base):
         self.capture = cv2.VideoCapture(0)
         self.image = None
 
-    def run(self):
+    def update(self):
         ret,self.image = self.capture.read()
 
     def currentImage(self):

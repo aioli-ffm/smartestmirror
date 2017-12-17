@@ -15,7 +15,6 @@ class Display(QLabel, Base):
     def __init__(self, title, parent, serviceRunner):
         super(Display, self).__init__(title, parent)
         self.parent = parent
-        self.config = self.defaultConfig()
 
     def init(self):
         self.parent.setGeometry(self.config["x"], self.config["y"], self.config["w"], self.config["h"])

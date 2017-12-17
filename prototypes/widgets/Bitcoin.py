@@ -22,7 +22,6 @@ class Bitcoin(QLabel, Base):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAlignment(Qt.AlignCenter)
         self.setStyleSheet("color: rgb(255,255,255);")
-        self.config = self.defaultConfig()
 
     def defaultConfig(self):
         return {"x":50, "y":900, "Interval":600, "Currency":"EUR"}

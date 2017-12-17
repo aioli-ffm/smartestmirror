@@ -19,7 +19,6 @@ class GpuInfoText(QLabel,Base):
         self.setAlignment(Qt.AlignCenter)
         self.setStyleSheet("color: rgb(255,255,255);")
 
-
     def settext(self,text):
         self.setText(text)
         newfont = QFont("Times", 22, QFont.Bold) 

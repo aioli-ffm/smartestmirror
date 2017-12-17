@@ -19,9 +19,6 @@ class Image(QLabel,Base):
     def __init__(self, title, parent, serviceRunner):
         super(Image,self).__init__(title,parent)
         self.parent = parent
-        #self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        #self.setAlignment(Qt.AlignCenter)
-        #self.setStyleSheet("color: rgb(255,255,255);")
 
     def setimg(self,img):
         img = np.require(img, np.uint8, 'C')

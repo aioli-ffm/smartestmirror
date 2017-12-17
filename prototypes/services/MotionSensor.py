@@ -22,12 +22,15 @@ class MotionSensor(Base):
         self.ser.port = '/dev/arduino_motionsensor'
         try:
             self.ser.open()
+            self.open = True
         except:
             print("Serial port not usable")
+            self.open = False
         self.callbacks = []
 
-    def run(self):
-        self.checkMotion()
+    def update(self):
+        if self.open:
+            self.checkMotion()
 
     def checkMotion(self):
         """
