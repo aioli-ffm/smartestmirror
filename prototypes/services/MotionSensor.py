@@ -11,10 +11,8 @@ class MotionSensor(Base):
     def __init__(self, serviceRunner):
         super(MotionSensor, self).__init__()
         self.serviceRunner = serviceRunner
-        self.init()
 
     def init(self):
-        self.config = self.defaultConfig()
         self.last_move = 0
         self.state = 0
         self.ser = serial.Serial()

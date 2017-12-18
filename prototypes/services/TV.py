@@ -11,7 +11,6 @@ class TV(Base):
     def __init__(self, serviceRunner):
         super(TV, self).__init__()
         self.serviceRunner = serviceRunner
-        self.init()
 
     def init(self):
         #cec.init() # AttributeError: 'module' object has no attribute 'init'

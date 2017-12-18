@@ -4,6 +4,11 @@
         "y": 0,
         "Interval": 1
     },
+    "SpeechCommands": {
+        "x": 0,
+        "y": 0,
+        "Interval": 1
+    },
     "Webcam": {
         "x": 1300,
         "y": 20,
