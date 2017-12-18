@@ -39,6 +39,11 @@
         "Interval": 600,
         "Currency": "EUR"
     },
+    "Mirror": {
+        "x": 1300,
+        "y": 500,
+        "Interval": 0.1
+    },
     "Xkcd": {
         "x": 50,
         "y": 500,

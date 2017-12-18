@@ -4,7 +4,7 @@
 from PyQt5.QtWidgets import * 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import ConfigParser
+import configparser
 import sys
 import datetime
 import cec
@@ -18,7 +18,7 @@ import widgets
 class Canvas(QWidget):
     def __init__(self):
         super(Canvas,self).__init__()
-        self.config = ConfigParser.ConfigParser()
+        self.config = configparser.ConfigParser()
         self.config.read("config.ini")
 
         self.initUI()
