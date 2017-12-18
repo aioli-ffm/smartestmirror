@@ -38,5 +38,10 @@
         "y": 900,
         "Interval": 600,
         "Currency": "EUR"
+    },
+    "Xkcd": {
+        "x": 50,
+        "y": 500,
+        "Interval": 600
     }
 }
