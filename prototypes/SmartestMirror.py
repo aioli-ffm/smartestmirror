@@ -29,6 +29,15 @@ class SmartestMirror(QWidget):
         p.setColor(self.backgroundRole(), Qt.black)
         self.setPalette(p)
 
+    def dragEnterEvent(self, e):
+        e.accept()
+
+    def dropEvent(self, e):
+        position = e.pos()
+        self.current_drag.move(position)
+        e.setDropAction(Qt.MoveAction)
+        e.accept()
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = SmartestMirror()
