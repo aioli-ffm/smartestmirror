@@ -21,9 +21,9 @@ class SpeechCommands(Base):
     def init(self):
         self.r = sr.Recognizer()
         self.m = sr.Microphone()
-        with self.m as source:
-            self.r.adjust_for_ambient_noise(source)
-        self.stop_listening = self.r.listen_in_background(self.m, self.callback)
+        #with self.m as source:
+        #    self.r.adjust_for_ambient_noise(source)
+        #self.stop_listening = self.r.listen_in_background(self.m, self.callback)
 
     def callback(self, recognizer, audio):
         try:
@@ -36,7 +36,7 @@ class SpeechCommands(Base):
 
     def addCallback(self, command, callback):
         callbacklist = []
-        try
+        try:
             callbacklist = self.callbacks[command]
         except Exception:
             pass

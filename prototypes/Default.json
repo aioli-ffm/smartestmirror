@@ -9,6 +9,11 @@
         "labels":"conv_actions_labels.txt",
         "Interval": 100
     },
+    "TTS": {
+        "voice":"en",
+        "speed":1,
+        "Interval": 1000
+    },
     "Webcam": {
         "x": 1300,
         "y": 20,
