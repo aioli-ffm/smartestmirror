@@ -5,9 +5,9 @@
         "Interval": 1
     },
     "SpeechCommands": {
-        "x": 0,
-        "y": 0,
-        "Interval": 1
+        "graph":"conv_actions_frozen.pb",
+        "labels":"conv_actions_labels.txt",
+        "Interval": 100
     },
     "Webcam": {
         "x": 1300,
