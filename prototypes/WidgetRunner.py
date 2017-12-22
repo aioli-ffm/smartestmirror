@@ -34,12 +34,12 @@ class WidgetRunner(object):
                 instance = class_(title=modname, parent=self.parent, serviceRunner=self.serviceRunner)
                 self.widgets[modname] = instance    
 
-    def configWidgets(self):
-        self.config.load(self.widgets.values(), "Default.json")
+    def configWidgets(self,profile="Default.json"):
+        self.config.load(self.widgets.values(), profile)
 
-    def initWidgets(self):
+    def initWidgets(self,profile="Default.json"):
         for widget in self.widgets.values():
-            if not self.config.isEnabled(widget,"Default.json"):
+            if not self.config.isEnabled(widget,profile):
                 widget.hide()
                 continue
             widget.init()
@@ -50,9 +50,9 @@ class WidgetRunner(object):
                 print("No position info for module %s"%widget)
                 print("Exception: ", e)
 
-    def startWidgets(self):
+    def startWidgets(self,profile="Default.json"):
         for widget in self.widgets.values():
-            if not self.config.isEnabled(widget,"Default.json"):
+            if not self.config.isEnabled(widget,profile):
                 continue
             # setup the update functions
             timer = QTimer()

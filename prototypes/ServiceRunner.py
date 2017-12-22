@@ -32,18 +32,18 @@ class ServiceRunner(object):
                 instance = class_(self)
                 self.services[modname] = instance
 
-    def configServices(self):
-        self.config.load(self.services.values(), "Default.json")
+    def configServices(self, profile="Default.json"):
+        self.config.load(self.services.values(), profile)
 
-    def initServices(self):
+    def initServices(self, profile="Default.json"):
         for service in self.services.values():
-            if not self.config.isEnabled(service,"Default.json"):
+            if not self.config.isEnabled(service,profile):
                 continue
             service.init()
 
-    def startServices(self):
+    def startServices(self, profile="Default.json"):
         for service in self.services.values():
-            if not self.config.isEnabled(service,"Default.json"):
+            if not self.config.isEnabled(service,profile):
                 continue
             # setup the update functions
             timer = QTimer()

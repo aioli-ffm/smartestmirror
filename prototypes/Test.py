@@ -2,7 +2,7 @@ import unittest
 from services import Webcam, MotionSensor
 from widgets import Bitcoin
 import Config
-import ServiceRunner, WidgetRunner
+import ServiceRunner, WidgetRunner, ProfileManager
 
 import sys
 from PyQt5.QtWidgets import * 
@@ -48,6 +48,19 @@ class TestWidgets(unittest.TestCase):
         bitcoin = widgetRunner.widgets["Bitcoin"]
         print(bitcoin.config["Currency"])
     def test_widgetsrunner(self):
+        pass
+
+class TestProfiles(unittest.TestCase):
+
+    def test_load_profile(self):
+        serviceRunner = ServiceRunner.ServiceRunner()
+        widgetRunner = WidgetRunner.WidgetRunner(parent=None, serviceRunner=serviceRunner)
+        profileManager = ProfileManager.ProfileManager(serviceRunner, widgetRunner)
+        print(profileManager.all())
+        profileManager.load("Default")
+        print(profileManager.current)
+
+    def test_change_profile(self):
         pass
 
 if __name__ == '__main__':

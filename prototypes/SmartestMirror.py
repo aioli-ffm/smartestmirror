@@ -9,6 +9,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import ServiceRunner
 import WidgetRunner
+import ProfileManager
 
 class SmartestMirror(QWidget):
     def __init__(self):
@@ -19,6 +20,8 @@ class SmartestMirror(QWidget):
         self.serviceRunner.init()
         self.widgetRunner = WidgetRunner.WidgetRunner(self, self.serviceRunner)
         self.widgetRunner.init()
+        self.profileManager = ProfileManager.ProfileManager(self.serviceRunner, self.widgetRunner)
+        self.profileManager.init()
 
     def initUI(self):
         self.setAcceptDrops(True)
