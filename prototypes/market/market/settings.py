@@ -54,7 +54,7 @@ ROOT_URLCONF = 'market.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["widgets/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

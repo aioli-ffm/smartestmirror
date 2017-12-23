@@ -1,3 +1,4 @@
+django
 pyaudio
 pyserial
 SpeechRecognition
