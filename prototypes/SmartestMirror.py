@@ -21,7 +21,6 @@ class SmartestMirror(QWidget):
         self.widgetRunner = WidgetRunner.WidgetRunner(self, self.serviceRunner)
         self.widgetRunner.init()
         self.profileManager = ProfileManager.ProfileManager(self.serviceRunner, self.widgetRunner)
-        self.profileManager.init()
 
     def initUI(self):
         self.setAcceptDrops(True)

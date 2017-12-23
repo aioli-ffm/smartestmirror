@@ -12,9 +12,6 @@ class ProfileManager(object):
         self.widgetRunner = widgetRunner
         self.current = "Default"
 
-    def init(self):
-        self.loadDefault()
-
     def load(self, profileName):
         fileName = profileName+".json"
         self.servivceRunner.stopServices()

@@ -4,11 +4,6 @@
         "y": 0,
         "Interval": 1
     },
-    "SpeechCommands": {
-        "graph":"conv_actions_frozen.pb",
-        "labels":"conv_actions_labels.txt",
-        "Interval": 100
-    },
     "TTS": {
         "voice":"en",
         "speed":1,

@@ -16,7 +16,7 @@ class Webcam(Base):
 
     def init(self):
         self.capture = cv2.VideoCapture(0)
-        self.image = None
+        self.image = self.capture.read()
 
     def update(self):
         ret,self.image = self.capture.read()
