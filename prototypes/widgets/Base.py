@@ -3,16 +3,22 @@
 author: Tobias Weis, Christian M
 '''
 from abc import abstractmethod
-from Configurateable import *
+#from Configurateable import *
 
 from PyQt5.QtWidgets import * 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-class Base(Configurateable):
+class Base(object):
     def __init__(self):
         super(Base, self).__init__()
         self.serviceRunner = None
+        self.config = {}
+
+    @classmethod
+    @abstractmethod
+    def defaultConfig(self):
+        return {"x":0, "y":0, "Interval":1}
 
     @classmethod
     @abstractmethod

@@ -3,9 +3,9 @@
 author: Christian M
 '''
 from abc import abstractmethod
-from Configurateable import *
+#from Configurateable import *
 
-class Base(Configurateable):
+class Base(object):
 
     def __init__(self):
         super(Base, self).__init__()

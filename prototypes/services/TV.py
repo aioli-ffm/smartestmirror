@@ -12,6 +12,9 @@ class TV(Base):
         super(TV, self).__init__()
         self.serviceRunner = serviceRunner
 
+    def defaultConfig(self):
+        return {}
+
     def init(self):
         #cec.init() # AttributeError: 'module' object has no attribute 'init'
         #self.tv = cec.Device(cec.CECDEVICE_TV)
