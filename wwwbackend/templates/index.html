@@ -64,6 +64,33 @@
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
 
+        <!-- interact for drag and drop -->
+        <script src="{{ url_for('static', filename='js/interact.js') }}"></script>
+
+	<style>
+#drag-1, #drag-2 {
+  width: 25%;
+  height: 200px;
+  min-height: 6.5em;
+  margin: 10%;
+
+  background-color: #29e;
+  color: white;
+
+  border-radius: 0.75em;
+  padding: 4%;
+
+  -webkit-transform: translate(0px, 0px);
+          transform: translate(0px, 0px);
+}
+
+#drag-me::before {
+  content: "#" attr(id);
+  font-weight: bold;
+}
+	</style>
+
+
 	</head>
 	<body>
 	
@@ -92,6 +119,7 @@
 				<div class="container">
 					<div class="fh5co-menu-1">
 						<a href="#" data-nav-section="config">Config</a>
+                                                <a href="#" data-nav-section="canvas">Drag and drop</a>
                                                 <!--
 						<a href="#" data-nav-section="services">Services</a>
 						<a href="#" data-nav-section="team">The Team</a>
@@ -103,10 +131,8 @@
 		</div>
 
 		<div id="fh5co-about" data-section="config">
-			<div class="fh5co-2col">
-				
-				<div class="fh5co-2col-inner left">
-						
+                        <!-- <div class="fh5co-2col-inner left"> -->
+                        <div class="container">
 						<div class="fh5co-tabs-container">
 							<ul class="fh5co-tabs fh5co-three">
                                                         {% for ce in configentries %}
@@ -126,17 +152,37 @@
                                                         <div class="fh5co-tab-content" data-tab-content="{{ ce.name }}">
                                                             {% endif %}
                                                             <h2>{{ ce.desc }}</h2>
-                                                            <p>TODO: read possible config-values, display them here and let the user change them</p>
+                                                            <form action="#" method="post">
+
+                                                            {% for cv in ce.configs %}
+                                                                <div class="row">
+                                                                <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <input type="text" name="{{ cv[0] }}" class="form-control" placeholder="{{ cv[1] }}">
+                                                                            <label for="{{ cv[0] }}">{{ cv[0] }}</label>
+                                                                        </div>		
+                                                                </div>
+
+                                                                </div>
+                                                            {% endfor %}
+                                                                <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-outline">
+                                                                        </div>
+                                                                </div>
+
+                                                                </div>
+                                                            </form>
+
+                                                        <!-- 
 							<p><a href="#" class="btn btn-primary btn-outline">Get In Touch</a></p>
-							</div>
+                                                        -->
                                                         {% endfor %}
 
 
-						</div>
+                                                        </div>
 
-				</div>
-
-			</div>
+                                                </div>
 
 
                         <!-- 
@@ -148,8 +194,76 @@
                                     <div class="fh5co-grid-item" style="background-image: url({{ url_for('static', filename='images/img_4.jpg') }});"></div>
 				</div>
 			</div>
+                        -->
 		</div> 
 
+                <script type="text/javascript">
+// target elements with the "draggable" class
+interact('.draggable')
+  .draggable({
+    // enable inertial throwing
+    inertia: true,
+    // keep the element within the area of it's parent
+    restrict: {
+      restriction: "parent",
+      endOnly: true,
+      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+    },
+    // enable autoScroll
+    autoScroll: true,
+
+    // call this function on every dragmove event
+    onmove: dragMoveListener,
+    // call this function on every dragend event
+    onend: function (event) {
+      var textEl = event.target.querySelector('p');
+
+      textEl && (textEl.textContent =
+        'moved a distance of '
+        + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
+                     Math.pow(event.pageY - event.y0, 2) | 0))
+            .toFixed(2) + 'px'
+	+ ' to position ' + event.pageX + ','+ event.pageY);
+    }
+  });
+
+  function dragMoveListener (event) {
+    var target = event.target,
+        // keep the dragged position in the data-x/data-y attributes
+        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+    // translate the element
+    target.style.webkitTransform =
+    target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)';
+
+    // update the posiion attributes
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+  }
+
+  // this is used later in the resizing and gesture demos
+  window.dragMoveListener = dragMoveListener;
+                </script>
+
+		<div id="fh5co-about" data-section="canvas">
+                        <!-- <div class="fh5co-2col-inner left"> -->
+                        <div class="container">
+                            <h1>TODO: implement canvas for drag-and-drop-stuff</h1>
+
+			    <div id="drag-1" class="draggable">
+			      <p> You can drag one element </p>
+			    </div>
+			    <div id="drag-2" class="draggable">
+			      <p> with each pointer </p>
+			    </div>
+
+
+                        </div>
+                </div>
+
+                <!-- 
 		<div id="fh5co-services" data-section="services">
 			<div class="fh5co-video"><a href="https://vimeo.com/channels/staffpicks/93951774" class="popup-vimeo"><i class="icon-play2"></i></a> <span>Watch video</span></div>
 			<div class="container">
@@ -207,7 +321,7 @@
 			</div>
 
 		</div> 
-		
+
 		<div id="fh5co-gallery">
                     <a href="images/img_3.jpg" class="fh5co-item image-popup" style="background-image: url({{ url_for('static', filename='images/img_3.jpg') }})">
 				<div class="fh5co-overlay"></div>
