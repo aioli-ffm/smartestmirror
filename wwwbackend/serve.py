@@ -1,7 +1,6 @@
 #!/usr/bin/python
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import json
-
 
 class configentry(object):
     def __init__(self,name="SomeApp", desc="This app displays stuff"):
@@ -12,7 +11,7 @@ class configentry(object):
 app = Flask(__name__)
 
 @app.route("/")
-def hello(name="Tobi"):
+def index(name="Tobi"):
     configvalues = json.load(open('../prototypes/Default.json'))
     configentries = []
 
@@ -25,3 +24,27 @@ def hello(name="Tobi"):
         configentries.append(ce)
 
     return render_template('index.html', configentries=configentries)
+
+@app.route("/handle_data", methods=['POST'])
+def handle_data():
+    '''
+    we get all fields that the app's config-section contained,
+    plus an additional field called widget_name,
+    which contains the name of the input to match it against the config-file
+    '''
+    # load original config-file again
+    configvalues = json.load(open('../prototypes/Default.json'))
+
+    # get all set fields and put them into the json
+    changed_widget_name = request.form['widget_name']
+    print "Changed widget: ", changed_widget_name
+
+    for k,v in request.form.iteritems():
+	configvalues[changed_widget_name][k] = v
+
+    # write the new values to it
+    with open('../prototypes/Default.json', 'w') as outfile:
+	json.dump(configvalues, outfile)
+
+    # this needs to return something
+    return "bla"

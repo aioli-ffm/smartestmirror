@@ -7,7 +7,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Icon &mdash; 100% Free Fully Responsive HTML5 Template by FREEHTML5.co</title>
+	<title>Smartestmirror Configuration</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -63,6 +63,10 @@
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
+
+	<!-- jQuery -->
+        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+
 
         <!-- interact for drag and drop -->
         <script src="{{ url_for('static', filename='js/interact.js') }}"></script>
@@ -152,27 +156,47 @@
                                                         <div class="fh5co-tab-content" data-tab-content="{{ ce.name }}">
                                                             {% endif %}
                                                             <h2>{{ ce.desc }}</h2>
-                                                            <form action="#" method="post">
+                                                            <!-- <form name="{{ ce.name }}" action="{{ url_for('handle_data') }}" method="post"> -->
+                                                            <form id="form_{{ ce.name }}" action="#">
 
                                                             {% for cv in ce.configs %}
                                                                 <div class="row">
                                                                 <div class="col-md-6">
                                                                         <div class="form-group">
-                                                                            <input type="text" name="{{ cv[0] }}" class="form-control" placeholder="{{ cv[1] }}">
+                                                                            <input type="text" name="{{ cv[0] }}" class="form-control" placeholder="{{ cv[1] }}" value="{{ cv[1] }}">
                                                                             <label for="{{ cv[0] }}">{{ cv[0] }}</label>
                                                                         </div>		
                                                                 </div>
 
                                                                 </div>
                                                             {% endfor %}
+								<!-- add a hidden field containing the widgets name -->
+								<input type="text" name="widget_name" value="{{ ce.name }}" hidden>
                                                                 <div class="col-md-12">
                                                                         <div class="form-group">
-                                                                                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-outline">
+                                                                                <input type="submit" name="submit_{{ ce.name }}" id="submit_{{ ce.name }}" value="Save" class="btn btn-primary btn-outline">
                                                                         </div>
                                                                 </div>
 
                                                                 </div>
                                                             </form>
+                                                            <script type="text/javascript">
+$(function() {
+$('#submit_{{ ce.name }}').click(function(e){
+  e.preventDefault();
+  //do some verification
+  console.log('SUBMIT CALLED');
+  $.ajax({
+    url: '{{ url_for('handle_data') }}',
+    type: 'POST',
+    method: 'POST',
+    data: $('#form_{{ ce.name }}').serialize(),
+    success: function(data){
+    }
+  });
+});
+});
+                                                            </script>
 
                                                         <!-- 
 							<p><a href="#" class="btn btn-primary btn-outline">Get In Touch</a></p>
@@ -454,7 +478,7 @@ interact('.draggable')
 					<h2>Get In Touch</h2>
 					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet nam itaque ipsam iste provident quo ipsam iste provident.</p>
 				</div>
-				<form action="#" method="post">
+				<form action="/handle_data" method="post" role="form">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -515,8 +539,6 @@ interact('.draggable')
 	
 	
 	
-	<!-- jQuery -->
-        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 	<!-- jQuery Easing -->
         <script src="{{ url_for('static', filename='js/jquery.easing.1.3.js') }}"></script>
 	<!-- Bootstrap -->
