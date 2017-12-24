@@ -1,5 +1,0 @@
-apt: python-pyqt5
-apt: libcec-dev
-apt: espeak
-pip: cec
-pip: pyserial
