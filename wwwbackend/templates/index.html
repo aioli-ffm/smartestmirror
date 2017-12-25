@@ -59,26 +59,24 @@
         <script src="{{ url_for('static', filename='js/interact.js') }}"></script>
 
 	<style>
-#drag-1, #drag-2 {
-  width: 25%;
-  height: 200px;
-  min-height: 6.5em;
-  margin: 10%;
+            .draggable{
+              width: 200px;
+              height: 200px;
+              min-height: 6.5em;
 
-  background-color: #29e;
-  color: white;
+              background-color: #29e;
+              color: white;
 
-  border-radius: 0.75em;
-  padding: 4%;
+              border-radius: 0.75em;
 
-  -webkit-transform: translate(0px, 0px);
-          transform: translate(0px, 0px);
-}
+              -webkit-transform: translate(0px, 0px);
+                      transform: translate(0px, 0px);
+            }
 
-#drag-me::before {
-  content: "#" attr(id);
-  font-weight: bold;
-}
+            #drag-me::before {
+              content: "#" attr(id);
+              font-weight: bold;
+            }
 	</style>
 
 
@@ -179,7 +177,7 @@ $('#submit_{{ ce.name }}').click(function(e){
 interact('.draggable')
   .draggable({
     // enable inertial throwing
-    inertia: true,
+    inertia: false,
     // keep the element within the area of it's parent
     restrict: {
       restriction: "parent",
@@ -193,14 +191,23 @@ interact('.draggable')
     onmove: dragMoveListener,
     // call this function on every dragend event
     onend: function (event) {
+        // get the topleft-corner of the dragged object and subtract the top-left corner of the id=mirror div
+        console.log("Mirror at: " + $("#mirror").position().top + "," + $("#mirror").position().left);
+        console.log("drag-1 at: " + ($("#drag-1").position().top - $("#mirror").position().top)+ "," + ($("#drag-1").position().left - $("#mirror").position().left));
+        console.log("drag-2 at: " + ($("#drag-2").position().top - $("#mirror").position().top)+ "," + ($("#drag-2").position().left - $("#mirror").position().left));
+
       var textEl = event.target.querySelector('p');
 
       textEl && (textEl.textContent =
+        //($("#drag-1").position().top - $("#mirror").position().top)+ "," + ($("#drag-1").position().left - $("#mirror").position().left));
+        ($("#drag-1").position().top - $("#mirror").position().top)+ "," + ($("#drag-1").position().left - $("#mirror").position().left));
+        /*
         'moved a distance of '
         + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
                      Math.pow(event.pageY - event.y0, 2) | 0))
             .toFixed(2) + 'px'
 	+ ' to position ' + event.pageX + ','+ event.pageY);
+        */
     }
   });
 
@@ -227,8 +234,8 @@ interact('.draggable')
 		<div id="fh5co-about" data-section="canvas">
                         <!-- <div class="fh5co-2col-inner left"> -->
                         <div class="container">
-                            <div class="mirror" style="background-color:#999;width:1080px;height:1920px;">
                                 <h1>TODO: implement canvas for drag-and-drop-stuff</h1>
+                            <div id="mirror" style="background-color:#999;width:1080px;height:1920px;padding:0;margin:0">
 
                                 <div id="drag-1" class="draggable">
                                   <p> You can drag one element </p>
