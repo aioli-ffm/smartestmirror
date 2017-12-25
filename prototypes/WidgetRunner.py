@@ -57,7 +57,7 @@ class WidgetRunner(object):
             # setup the update functions
             timer = QTimer()
             timer.timeout.connect(widget.update)
-            timer.start(widget.config['Interval']*1000) # from s to Ms for the timer
+            timer.start(float(widget.config['Interval'])*1000) # from s to Ms for the timer
             widget.update()
             self.timers.append(timer)
 
