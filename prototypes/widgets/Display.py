@@ -17,8 +17,13 @@ class Display(QLabel, Base):
         self.parent = parent
 
     def init(self):
-        self.parent.setGeometry(self.config["x"], self.config["y"], self.config["w"], self.config["h"])
+        self.parent.setGeometry(
+                int(self.config["x"]), 
+                int(self.config["y"]), 
+                int(self.config["w"]), 
+                int(self.config["h"])
+                )
 
     def defaultConfig(self):
-        return {"x":0, "y":0, "w":1920, "h":1080, "Interval":10000}
+        return {"x":0, "y":0, "w":1080, "h":1920, "Interval":10000}
 

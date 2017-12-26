@@ -2,3 +2,5 @@ django
 pyaudio
 pyserial
 SpeechRecognition
+cec
+Flask

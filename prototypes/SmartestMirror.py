@@ -21,13 +21,12 @@ class SmartestMirror(QWidget):
         self.widgetRunner = WidgetRunner.WidgetRunner(self, self.serviceRunner)
         self.widgetRunner.init()
         self.profileManager = ProfileManager.ProfileManager(self.serviceRunner, self.widgetRunner)
-        self.profileManager.init()
 
     def initUI(self):
         self.setAcceptDrops(True)
         # create window, geometry and colors
         self.setWindowTitle('Smartestmirror')
-        #self.setGeometry(0, 0, self.config.getint("Display","w"), self.config.getint("Display","h"))
+        self.setGeometry(0, 0, 1080, 1920)
         p = self.palette()
         p.setColor(self.backgroundRole(), Qt.black)
         self.setPalette(p)
