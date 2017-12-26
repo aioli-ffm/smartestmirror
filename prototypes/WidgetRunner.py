@@ -44,7 +44,10 @@ class WidgetRunner(object):
                 continue
             widget.init()
             try:
-                widget.move(widget.config["x"], widget.config["y"])
+                widget.move(
+                        int(widget.config["x"]), 
+                        int(widget.config["y"])
+                        )
             except Exception as e:
                 widget.hide()
                 print("No position info for module %s"%widget)

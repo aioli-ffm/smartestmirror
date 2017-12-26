@@ -194,8 +194,23 @@ interact('.draggable')
 
       var textEl = event.target.querySelector('p');
 
-      textEl && (textEl.textContent =
-        (Math.floor($(event.currentTarget).position().top - $("#mirror").position().top))+ "," + Math.floor($(event.currentTarget).position().left - $("#mirror").position().left));
+      var newx = Math.floor($(event.currentTarget).position().left - $("#mirror").position().left);
+      var newy = Math.floor($(event.currentTarget).position().top - $("#mirror").position().top);
+      var widget_name = textEl.textContent;
+
+      // tell the server to change config
+      $.ajax({
+        url: '{{ url_for('handle_data') }}',
+        type: 'POST',
+        method: 'POST',
+        //data: $('#form_test').serialize(),
+        data: {
+            widget_name:widget_name,
+            x:newx, 
+            y:newy
+        },
+        success: function(data){}
+        });
     }
   });
 
@@ -224,15 +239,25 @@ interact('.draggable')
                         <div class="container">
                                 <h1>TODO: implement canvas for drag-and-drop-stuff</h1>
                             <div id="mirror" style="background-color:#999;width:1080px;height:1920px;padding:0;margin:0">
+                                {% for ce in configentries %}
+                                    <div id="{{ ce.name }}" class="draggable">
+                                        <p>{{ ce.name }}</p>
+                                    </div>
+                                    <script type="text/javascript">
+                                        //$("#{{ ce.name }}").parent().css({position: 'relative'});
+                                        {% for cv in ce.configs %}
+                                            {% if cv[0] == "x" %}
+                                                var myx = {{ cv[1] }};
+                                            {% elif cv[0] == "y" %}
+                                                var myy = {{ cv[1] }};
+                                            {% endif %}
+                                        {% endfor %}
 
-                                <div id="drag-1" class="draggable">
-                                  <p> You can drag one element </p>
-                                </div>
-                                <div id="drag-2" class="draggable">
-                                  <p> with each pointer </p>
-                                </div>
+                                        console.log("xy: " + myx + "," + myy);
+                                        $("#{{ ce.name }}").css({top: myy+$("#mirror").position().top, left: myx+$("#mirror").position().left, position:'absolute'});
+                                    </script>
+                                {% endfor %}
                             </div>
-
                         </div>
                 </div>
 
