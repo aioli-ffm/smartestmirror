@@ -191,23 +191,11 @@ interact('.draggable')
     onmove: dragMoveListener,
     // call this function on every dragend event
     onend: function (event) {
-        // get the topleft-corner of the dragged object and subtract the top-left corner of the id=mirror div
-        console.log("Mirror at: " + $("#mirror").position().top + "," + $("#mirror").position().left);
-        console.log("drag-1 at: " + ($("#drag-1").position().top - $("#mirror").position().top)+ "," + ($("#drag-1").position().left - $("#mirror").position().left));
-        console.log("drag-2 at: " + ($("#drag-2").position().top - $("#mirror").position().top)+ "," + ($("#drag-2").position().left - $("#mirror").position().left));
 
       var textEl = event.target.querySelector('p');
 
       textEl && (textEl.textContent =
-        //($("#drag-1").position().top - $("#mirror").position().top)+ "," + ($("#drag-1").position().left - $("#mirror").position().left));
-        ($("#drag-1").position().top - $("#mirror").position().top)+ "," + ($("#drag-1").position().left - $("#mirror").position().left));
-        /*
-        'moved a distance of '
-        + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
-                     Math.pow(event.pageY - event.y0, 2) | 0))
-            .toFixed(2) + 'px'
-	+ ' to position ' + event.pageX + ','+ event.pageY);
-        */
+        (Math.floor($(event.currentTarget).position().top - $("#mirror").position().top))+ "," + Math.floor($(event.currentTarget).position().left - $("#mirror").position().left));
     }
   });
 
