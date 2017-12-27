@@ -23,7 +23,6 @@ class WidgetRunner(object):
 
     def init(self, profile="Default.json"):
 
-        print "[WR] init profile: ", profile
         self.widgets = {}
         self.timers = []
 
@@ -34,7 +33,6 @@ class WidgetRunner(object):
         self.startWidgets()
 
     def clear(self):
-        print "[WR] clear"
         for w,v in self.widgets.iteritems():
             #v.setParent(None)
             v.deleteLater()
@@ -46,7 +44,6 @@ class WidgetRunner(object):
         self.timers = []
 
     def loadWidgets(self):
-        print "[WR] load widgets"
         for importer,modname,ispkg in pkgutil.iter_modules(widgets.__path__):
             if modname != "Base":
                 print("Found widget %s" % modname)
@@ -58,11 +55,9 @@ class WidgetRunner(object):
                 #self.parent.addWidget(instance)
 
     def configWidgets(self):
-        print "[WR] config widgets"
         self.config.load(self.widgets.values(), self.profile)
 
     def initWidgets(self):
-        print "[WR] init widgets"
         for widget in self.widgets.values():
             if not self.config.isEnabled(widget,self.profile):
                 widget.hide()
@@ -79,7 +74,6 @@ class WidgetRunner(object):
                 print("Exception: ", e)
 
     def startWidgets(self):
-        print "[WR] start widgets"
         for widget in self.widgets.values():
             if not self.config.isEnabled(widget,self.profile):
                 print "Widget not enabled: ", widget

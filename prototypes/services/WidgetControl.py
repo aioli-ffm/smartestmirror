@@ -21,21 +21,7 @@ class WidgetControl(Base):
         if self.cnt > 1:
             print "------------ CNT: ", self.cnt
             if self.cnt % 2 == 0:
-                print "Switching profile to Tobi"
-                self.serviceRunner.widgetRunner.stopWidgets()
-                self.serviceRunner.widgetRunner.clear()
-                #self.serviceRunner.widgetRunner.parent.initUI()
-
-                #self.serviceRunner.widgetRunner = WidgetRunner.WidgetRunner(self.serviceRunner.parent, self.serviceRunner)
-                self.serviceRunner.widgetRunner.init(profile="Tobi.json")
-                self.serviceRunner.parent.show()
+                self.serviceRunner.parent.profileManager.load("Tobi")
             else:
-                print "Switching profile to Default"
-                self.serviceRunner.widgetRunner.stopWidgets()
-                self.serviceRunner.widgetRunner.clear()
-                #self.serviceRunner.widgetRunner.parent.initUI()
-                
-                #self.serviceRunner.widgetRunner = WidgetRunner.WidgetRunner(self.serviceRunner.parent, self.serviceRunner)
-                self.serviceRunner.widgetRunner.init(profile="Default.json")
-                self.serviceRunner.parent.show()
+                self.serviceRunner.parent.profileManager.load("Default")
         self.cnt += 1
