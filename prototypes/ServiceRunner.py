@@ -17,7 +17,9 @@ class ServiceRunner(object):
         self.services = {}
         self.timers = []
 
-    def init(self):
+    def init(self, parent, widgetRunner):
+        self.parent = parent
+        self.widgetRunner = widgetRunner
         self.loadServices()
         self.configServices()
         self.initServices()

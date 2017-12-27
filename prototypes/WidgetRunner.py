@@ -6,6 +6,7 @@ import widgets
 import Config
 
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QGridLayout, QLayout
 
 import importlib
 import pkgutil
@@ -16,16 +17,36 @@ class WidgetRunner(object):
         self.serviceRunner = serviceRunner
         self.parent = parent
         self.config = Config.Config()
+        #self.grid = QGridLayout()
+        #self.parent.setLayout(self.grid)
+
+
+    def init(self, profile="Default.json"):
+
+        print "[WR] init profile: ", profile
         self.widgets = {}
         self.timers = []
 
-    def init(self):
+        self.profile = profile
         self.loadWidgets()
         self.configWidgets()
         self.initWidgets()
         self.startWidgets()
 
+    def clear(self):
+        print "[WR] clear"
+        for w,v in self.widgets.iteritems():
+            #v.setParent(None)
+            v.deleteLater()
+
+        del self.widgets
+        del self.timers
+
+        self.widgets = {}
+        self.timers = []
+
     def loadWidgets(self):
+        print "[WR] load widgets"
         for importer,modname,ispkg in pkgutil.iter_modules(widgets.__path__):
             if modname != "Base":
                 print("Found widget %s" % modname)
@@ -33,13 +54,17 @@ class WidgetRunner(object):
                 class_ = getattr(mod, modname)
                 instance = class_(title=modname, parent=self.parent, serviceRunner=self.serviceRunner)
                 self.widgets[modname] = instance    
+                #self.grid.addWidget(instance)
+                #self.parent.addWidget(instance)
 
-    def configWidgets(self,profile="Default.json"):
-        self.config.load(self.widgets.values(), profile)
+    def configWidgets(self):
+        print "[WR] config widgets"
+        self.config.load(self.widgets.values(), self.profile)
 
-    def initWidgets(self,profile="Default.json"):
+    def initWidgets(self):
+        print "[WR] init widgets"
         for widget in self.widgets.values():
-            if not self.config.isEnabled(widget,profile):
+            if not self.config.isEnabled(widget,self.profile):
                 widget.hide()
                 continue
             widget.init()
@@ -53,15 +78,18 @@ class WidgetRunner(object):
                 print("No position info for module %s"%widget)
                 print("Exception: ", e)
 
-    def startWidgets(self,profile="Default.json"):
+    def startWidgets(self):
+        print "[WR] start widgets"
         for widget in self.widgets.values():
-            if not self.config.isEnabled(widget,profile):
+            if not self.config.isEnabled(widget,self.profile):
+                print "Widget not enabled: ", widget
                 continue
             # setup the update functions
             timer = QTimer()
             timer.timeout.connect(widget.update)
             timer.start(float(widget.config['Interval'])*1000) # from s to Ms for the timer
             widget.update()
+            widget.show()
             self.timers.append(timer)
 
     def stopWidgets(self):

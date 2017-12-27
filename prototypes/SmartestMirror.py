@@ -17,8 +17,10 @@ class SmartestMirror(QWidget):
         self.initUI()
         
         self.serviceRunner = ServiceRunner.ServiceRunner()
-        self.serviceRunner.init()
         self.widgetRunner = WidgetRunner.WidgetRunner(self, self.serviceRunner)
+
+        self.serviceRunner.init(self, self.widgetRunner)
+
         self.widgetRunner.init()
         self.profileManager = ProfileManager.ProfileManager(self.serviceRunner, self.widgetRunner)
 
