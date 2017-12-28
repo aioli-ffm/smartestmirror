@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic.list import ListView
 from . import walker
+from .httpresponsepaymentrequired import HttpResponsePaymentRequired
 
 def index(request):
     widgets_list = walker.all("widgets/widgets")
@@ -13,5 +14,7 @@ def index(request):
 def detail(request, widget_id):
     widget = walker.widget("widgets/widgets/"+widget_id+".json")
     context = {'widget': widget}
-    print(context)
     return render(request, 'widget_detail.html', context)
+
+def download(request, widget_id):
+    return HttpResponsePaymentRequired(widget_id) 
