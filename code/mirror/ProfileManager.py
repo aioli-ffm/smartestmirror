@@ -14,16 +14,16 @@ class ProfileManager(object):
 
     def load(self, profileName):
         fileName = profileName+".json"
+        '''
         self.servivceRunner.stopServices()
         self.servivceRunner.configServices(fileName)
         self.servivceRunner.initServices(fileName)
         self.servivceRunner.startServices(fileName)
+        '''
 
         self.widgetRunner.stopWidgets()
-        self.widgetRunner.configWidgets(fileName)
-        self.widgetRunner.initWidgets(fileName)
-        self.widgetRunner.startWidgets(fileName)
-        self.current = profileName
+        self.widgetRunner.clear()
+        self.widgetRunner.init(profile=fileName)
 
     def all(self):
         f = []

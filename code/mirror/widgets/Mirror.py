@@ -11,6 +11,7 @@ import calendar
 import numpy as np
 from widgets.Base import *
 import time
+import os
 
 class Mirror(QLabel,Base):
     """
@@ -26,8 +27,10 @@ class Mirror(QLabel,Base):
 
     def downloadHaarcascade(self):
         import urllib
-        testfile = urllib.URLopener()
-        testfile.retrieve("https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml", "haarcascade_frontalface_default.xml")
+        if not os.path.isfile("haarcascade_frontalface_default.xml"): 
+            print "Downloading Haarcascade"
+            testfile = urllib.URLopener()
+            testfile.retrieve("https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml", "haarcascade_frontalface_default.xml")
 
     def setimg(self,img):
         img = np.require(img, np.uint8, 'C')
