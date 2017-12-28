@@ -13,6 +13,11 @@ from torchvision import datasets, transforms
 from torch.autograd import Variable
 from Net import *
 
+from sklearn.metrics import confusion_matrix 
+import matplotlib.pyplot as plt
+import itertools
+
+
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
 parser.add_argument('--batch-size', type=int, default=64, metavar='N',
@@ -68,7 +73,7 @@ X_train = np.array(X_train)
 y_train = np.array(y_train)
 
 #set aside a random set for testing
-indices = np.random.randint(0,len(X_train),int(len(X_train)*0.1))
+indices = np.random.randint(0,len(X_train),int(len(X_train)*0.2))
 X_test = X_train[indices]
 y_test = y_train[indices]
 np.delete(X_train, indices)
@@ -122,10 +127,47 @@ def train(epoch):
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.data[0]))
 
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap, vmax=200)
+    plt.title(title)
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=90)
+    plt.yticks(tick_marks, classes)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")                                                             
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+
 def test():
     model.eval()
     test_loss = 0
     correct = 0
+
+    targets_hr = []
+    preds_hr = []
+
     for data, target in test_loader:
         if args.cuda:
             data, target = data.cuda(), target.cuda()
@@ -135,6 +177,19 @@ def test():
         pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
         correct += pred.eq(target.data.view_as(pred)).cpu().sum()
 
+        for t in target.data.cpu().numpy():
+            targets_hr.append(mylabels[t])
+
+        for p in pred.cpu().numpy():
+            preds_hr.append(mylabels[p[0]])
+
+
+    cr = confusion_matrix(targets_hr, preds_hr, labels=mylabels)
+    plt.figure(figsize=(10,10))
+    plot_confusion_matrix(cr, classes=mylabels, title='FACE conf mat')
+    plt.savefig("/tmp/conf_mat.png")
+    #plt.show()
+
     test_loss /= len(test_loader.dataset)
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
@@ -143,5 +198,5 @@ def test():
 
 for epoch in range(1, args.epochs):
     train(epoch)
-    torch.save(model.state_dict(), './FACENET.pth') 
+    #torch.save(model.state_dict(), './FACENET.pth') 
     test()

@@ -9,7 +9,6 @@ from torch.autograd import Variable
 
 mylabels = [
         "tobi",
-        "arnold",
         "mari",
         "martin",
         "raj",
