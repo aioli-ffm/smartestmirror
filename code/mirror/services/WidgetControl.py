@@ -19,7 +19,7 @@ class WidgetControl(Base):
 
     def update(self):
         if self.cnt > 1:
-            print "------------ CNT: ", self.cnt
+            print("------------ CNT: ", self.cnt)
             if self.cnt % 2 == 0:
                 self.serviceRunner.parent.profileManager.load("Tobi")
             else:
