@@ -76,7 +76,7 @@ class WidgetRunner(object):
     def startWidgets(self):
         for widget in self.widgets.values():
             if not self.config.isEnabled(widget,self.profile):
-                print "Widget not enabled: ", widget
+                print("Widget not enabled: ", widget)
                 continue
             # setup the update functions
             timer = QTimer()
