@@ -49,7 +49,7 @@ import sys
 import cv2
 import numpy as np
 
-basefolder = '/home/shared/data/faces/lfw/all_extracted/'
+basefolder = '/home/shared/data/all_extracted/'
 # get all filenames for labels
 all_fnames = {}
 X_train = []
@@ -198,5 +198,5 @@ def test():
 
 for epoch in range(1, args.epochs):
     train(epoch)
-    #torch.save(model.state_dict(), './FACENET.pth') 
+    torch.save(model.state_dict(), './FACENET.pth') 
     test()

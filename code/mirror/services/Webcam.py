@@ -19,7 +19,7 @@ class Webcam(Base):
     def init(self):
         self.capture = cv2.VideoCapture(self.config['device'])
         if not self.capture.isOpened():
-	        print("Could not open camera")
+	        print("Could not open camera ", self.config['device'])
         ret, self.image = self.capture.read()
 
     def update(self):

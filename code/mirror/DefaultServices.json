@@ -8,6 +8,9 @@
         "x": "1300",
         "device":0
     },
+    "FaceRecog":{
+        "Interval":"0.5"  
+    },
     "MotionSensor": {
         "y": 0,
         "x": 0,
