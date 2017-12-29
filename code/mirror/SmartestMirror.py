@@ -4,28 +4,30 @@
 author: Christian M
 '''
 import sys
-from PyQt5.QtWidgets import * 
+from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import ServiceRunner
 import WidgetRunner
 import ProfileManager
 
+
 class SmartestMirror(QWidget):
     def __init__(self):
-        super(SmartestMirror,self).__init__()
+        super(SmartestMirror, self).__init__()
         self.initUI()
-        
+
         self.serviceRunner = ServiceRunner.ServiceRunner()
         self.widgetRunner = WidgetRunner.WidgetRunner(self, self.serviceRunner)
 
         self.serviceRunner.init(self, self.widgetRunner)
 
         self.widgetRunner.init()
-        self.profileManager = ProfileManager.ProfileManager(self.serviceRunner, self.widgetRunner)
+        self.profileManager = ProfileManager.ProfileManager(
+            self.serviceRunner, self.widgetRunner)
 
     def initUI(self):
-	self.showFullScreen()
+        self.showFullScreen() # -> Display widget
         self.setAcceptDrops(True)
         # create window, geometry and colors
         self.setWindowTitle('Smartestmirror')
@@ -42,6 +44,7 @@ class SmartestMirror(QWidget):
         self.current_drag.move(position)
         e.setDropAction(Qt.MoveAction)
         e.accept()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
