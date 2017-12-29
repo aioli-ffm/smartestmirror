@@ -6,6 +6,7 @@ from Net import *
 import os.path
 import cv2
 import numpy as np
+import time
 
 class Predictor:
     def __init__(self):
@@ -25,7 +26,12 @@ class Predictor:
         cascPath = "./supplementary/haarcascade_frontalface_default.xml"
         self.faceCascade = cv2.CascadeClassifier(cascPath)
 
-    def extractFace(self):
+        try:
+            os.mkdir("/tmp/patches/")
+        except:
+            pass
+
+    def extractFace(self, save=False):
 	self.patches = []
 	self.coordinates = []
 
@@ -50,7 +56,12 @@ class Predictor:
 
 
 	for (x, y, w, h) in faces:
-	    patch = self.gray[y:y+h, x:x+w]/255.
+	    patch = self.gray[y:y+h, x:x+w]
+
+            if save:
+                cv2.imwrite("/tmp/patches/%d_%d_%d_%d_%d.jpg" % (time.time(), x,y,w,h), patch)
+
+	    patch = patch/255.
             patch = cv2.resize(patch, (32,32))
 	
 	    self.patches.append(np.array(patch.astype(np.float32)))
