@@ -25,6 +25,7 @@ class SmartestMirror(QWidget):
         self.profileManager = ProfileManager.ProfileManager(self.serviceRunner, self.widgetRunner)
 
     def initUI(self):
+	self.showFullScreen()
         self.setAcceptDrops(True)
         # create window, geometry and colors
         self.setWindowTitle('Smartestmirror')

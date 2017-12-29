@@ -36,7 +36,7 @@ class MotionSensor(Base):
         """
         res = self.ser.readline()
         try:
-            if self.state == 1 and time.time() - self.last_move > 10 * 60:  # FIXME: hardcoded keep-on-time
+            if self.state == 1 and time.time() - self.last_move > 2 * 60:  # FIXME: hardcoded keep-on-time
                 self.execOff()
                 
             if not "0" in res:

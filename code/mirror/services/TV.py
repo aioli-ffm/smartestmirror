@@ -16,10 +16,12 @@ class TV(Base):
         return {}
 
     def init(self):
-        #cec.init() # AttributeError: 'module' object has no attribute 'init'
-        #self.tv = cec.Device(cec.CECDEVICE_TV)
-        # MotionSensor.addCallback(self.callback)
-        pass
+	try:
+		cec.init() # AttributeError: 'module' object has no attribute 'init'
+		self.tv = cec.Device(cec.CECDEVICE_TV)
+		MotionSensor.addCallback(self.callback)
+	except:
+		print("Cannot take control of TV")
 
     def update(self):
         pass
