@@ -13,8 +13,8 @@ class MotionSensor(Base):
         self.serviceRunner = serviceRunner
 
     def init(self):
-        self.last_move = 0
-        self.state = 0
+        self.last_move = time.time()
+        self.state = 1 # Mirror will be turned on at start
         self.ser = serial.Serial()
         self.ser.baudrate = 9600
         self.ser.port = '/dev/arduino_motionsensor'
@@ -34,12 +34,15 @@ class MotionSensor(Base):
         """
         read the serial motion sensor, turn on and off the TV and the widget-timers
         """
-        res = self.ser.readline()
+	res = 0
+	while(self.ser.inWaiting()>0):
+		res = self.ser.readline()
         try:
-            if self.state == 1 and time.time() - self.last_move > 2 * 60:  # FIXME: hardcoded keep-on-time
+            if self.state == 1 and time.time() - self.last_move > 1 * 60:  # FIXME: hardcoded keep-on-time
                 self.execOff()
                 
             if not "0" in res:
+		print("Movement detected")
                 self.last_move = time.time()
 
             if "0" not in res and self.state == 0:
@@ -48,11 +51,13 @@ class MotionSensor(Base):
             print("Exception: ", e)
 
     def execOn(self):
+	print("----Motionsensing: Turning TV on")
         self.state = 1
         for callback in self.callbacks:
             callback(self.state)
 
     def execOff(self):
+	print("----Motionsensing: Turning TV off")
         self.state = 0
         for callback in self.callbacks:
             callback(self.state)
