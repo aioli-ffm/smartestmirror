@@ -11,8 +11,8 @@ import lib.models as architectures
 import lib.datasets as datasets
 from lib.cmdparser import parser
 from lib.initialization import WeightInit
-from lib.utility import save_checkpoint
 from lib.train import train_unsup
+from lib.utility import save_checkpoint
 
 
 def main():
