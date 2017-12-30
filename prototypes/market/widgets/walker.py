@@ -17,6 +17,7 @@ def all(path):
 
 def load(file):
         data = {
+            "id":"unknown",
             "title":"Widget not found",
             "description":"unknown",
             "value":0
@@ -24,6 +25,7 @@ def load(file):
         with open(file, 'r') as infile:
             print(file)
             data = json.load(infile)
+            data["id"]=splitext(basename(file))[0]
         return data
 
 def widget(path):

@@ -6,19 +6,22 @@ from six import binary_type, moves as compat, text_type
 class TestIOTA(unittest.TestCase):
 
     uri = "http://p103.iotaledger.net:14700"
-    receiver = 'ACESICDEEKYSTSBBKCXHGGBTFR9FGOMOWDAQJEI9ECTBBMKRFLMGAJXOQGSOOMODKPJKANVSEGIEYNNNA'
-    receiver_check = 'ACESICDEEKYSTSBBKCXHGGBTFR9FGOMOWDAQJEI9ECTBBMKRFLMGAJXOQGSOOMODKPJKANVSEGIEYNNNAILGUG9RUX'
-    sender = 'QXOPKXZWDDWAVHBT9R9SKADZFKAICA9CCPRUTJDUCJBRGCWKFDQQEBBDYOYZIHSLHGWMAARJSTGJXXUNX'
+    # https://seeedy.tangle.works
+    sender_seed = 'Y9CXVYQAJ9SLEY9DWRYEIBAUFYSHRYJHWBDMKDTKBNSZGWMEAYZIEP9ETLZUQKZ9RIG9QUJZUVAFQJMMN'
+    receiver_seed = 'LI9HGSKOOIMOHDVDJXHDOKOIMLWSQQCOLAXBZDYUYSJZWVJANFMOROLBTMKK9NHHNHSHDPUSEATTI9IZW'
+    receiver = 'ESJYJSXVXZZJGWCHDEZQHWWMZNHGJIBXPEENUGOBTNKKFINXSSB9PAWIUITRUCB9VMLLKCASHO99OYYJD'
+    receiver_check = 'ESJYJSXVXZZJGWCHDEZQHWWMZNHGJIBXPEENUGOBTNKKFINXSSB9PAWIUITRUCB9VMLLKCASHO99OYYJDMWTVJXSLZ'
+    sender = 'UVCRBLOFBJBABWIWXUKBOOCPZIKLQSEHDJBIRECGJJITPIEUUKQWBCOINCUMUPIIMVJPGFOAP9XRXNWXZ'
     sender_check = 'QXOPKXZWDDWAVHBT9R9SKADZFKAICA9CCPRUTJDUCJBRGCWKFDQQEBBDYOYZIHSLHGWMAARJSTGJXXUNXMIARSVBCD'
 
     def test_nodeinfo(self):
-        print(__version__)
+        #print(__version__)
         api = StrictIota(self.uri)
         node_info = api.get_node_info()
-        print(node_info)
+        #print(node_info)
 
     def test_findtransaction(self):
-        addresses = [Address(self.sender), Address(self.receiver)]
+        addresses = [Address(self.sender_check), Address(self.receiver)]
         print(addresses)
         api = Iota(self.uri)
         transactions = api.find_transactions(addresses = addresses)
@@ -54,7 +57,24 @@ class TestIOTA(unittest.TestCase):
                     txrec = bundle[0]
                     if txrec.address == self.receiver:
                         hasSent = True
-                    print(txrec.address)
+                        print(txrec.address, ": ", txrec.tag)
+        assert(hasSent)
+
+    def test_received_value_tag(self):
+        value = 20
+        tag = 'Xkcd'
+        addresses = [Address(self.receiver_check)]
+        hasSent = False
+        api = Iota(self.uri)
+        transactions = api.find_transactions(addresses = addresses)
+        for hashe in transactions["hashes"]:
+                print(hashe)
+                bundles = api.get_bundles(hashe)
+                for bundle in bundles["bundles"]:
+                    txrec = bundle[0]
+                    if txrec.address == self.receiver and txrec.value == value and str(txrec.tag).startswith(tag.upper()):
+                        hasSent = True
+                        print(txrec.address, ": ", txrec.tag)
         assert(hasSent)
 
 if __name__ == '__main__':

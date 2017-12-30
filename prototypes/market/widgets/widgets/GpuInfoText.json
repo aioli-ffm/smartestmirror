@@ -1,5 +1,5 @@
 {
     "title":"GpuInfoText",
     "description":"Display GPU Temperature",
-    "value":1000
+    "value":10
 }
