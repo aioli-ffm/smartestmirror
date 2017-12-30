@@ -88,7 +88,7 @@ def main():
             'optimizer': optimizer.state_dict(),
         }, is_best, save_path)
 
-        # increment epoch counters
+        # increment epoch counter
         epoch += 1
 
 if __name__ == '__main__':

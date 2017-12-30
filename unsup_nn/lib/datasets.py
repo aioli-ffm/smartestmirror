@@ -41,6 +41,7 @@ class CUSTOM:
             transforms.CenterCrop(patch_size),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
+            #transforms.Lambda(lambda x: x.narrow(0, 0, 1)),  #one (not so nice) way of going to gray-scale
             ])
 
         return train_transforms

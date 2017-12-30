@@ -1,6 +1,11 @@
 import torch
 import torch.nn as nn
 
+# image size doesn't matter as long as
+# minimum size of images is 32 x 32.
+# So far, best results in terms of accuracy vs. computation trade-off
+# seem to be achieved at 96 x 96 patch size
+
 class CAE(nn.Module):
     def __init__(self, batch_norm):
         super(CAE, self).__init__()
@@ -8,22 +13,22 @@ class CAE(nn.Module):
         self.batch_norm = batch_norm
 
         self.encoder = nn.Sequential(
-            nn.Conv2d(3, 64, 8, stride=2, padding=1),
+            nn.Conv2d(3, 32, 8, stride=2, padding=1),
+            nn.BatchNorm2d(32, eps=self.batch_norm),
+            nn.ReLU(True),
+            nn.Conv2d(32, 64, 8, stride=2, padding=1),
             nn.BatchNorm2d(64, eps=self.batch_norm),
             nn.ReLU(True),
-            nn.Conv2d(64, 198, 8, stride=2, padding=1),
-            nn.BatchNorm2d(198, eps=self.batch_norm),
-            nn.ReLU(True),
-            nn.Conv2d(198, 198, 5, stride=2)
+            nn.Conv2d(64, 64, 5, stride=2)
         )
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(198, 198, 5, stride=2),
-            nn.BatchNorm2d(198, eps=self.batch_norm),
-            nn.ReLU(True),
-            nn.ConvTranspose2d(198, 64, 8, stride=2, padding=1),
+            nn.ConvTranspose2d(64, 64, 5, stride=2),
             nn.BatchNorm2d(64, eps=self.batch_norm),
             nn.ReLU(True),
-            nn.ConvTranspose2d(64, 3, 8, stride=2, padding=1),
+            nn.ConvTranspose2d(64, 32, 8, stride=2, padding=1),
+            nn.BatchNorm2d(32, eps=self.batch_norm),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, 3, 8, stride=2, padding=1),
             nn.Sigmoid()
         )
 
@@ -34,27 +39,28 @@ class CAE(nn.Module):
 
 
 class VCAE(nn.Module):
+    # TODO: Doesn't seem to work very well yet!
     def __init__(self, batch_norm):
         super(VCAE, self).__init__()
 
         self.batch_norm = batch_norm
 
-        self.conv1 = nn.Conv2d(3, 64, 8, stride=2, padding=1)
-        self.bn1 = nn.BatchNorm2d(64, eps=batch_norm)
+        self.conv1 = nn.Conv2d(3, 32, 8, stride=2, padding=1)
+        self.bn1 = nn.BatchNorm2d(32, eps=self.batch_norm)
 
-        self.conv2 = nn.Conv2d(64, 128, 8, stride=2, padding=1)
-        self.bn2 = nn.BatchNorm2d(128, eps=batch_norm)
+        self.conv2 = nn.Conv2d(32, 64, 8, stride=2, padding=1)
+        self.bn2 = nn.BatchNorm2d(64, eps=self.batch_norm)
 
-        self.conv31 = nn.Conv2d(128, 2, 5, stride=2)
-        self.conv32 = nn.Conv2d(128, 2, 5, stride=2)
+        self.conv31 = nn.Conv2d(64, 2, 5, stride=2)
+        self.conv32 = nn.Conv2d(64, 2, 5, stride=2)
 
-        self.conv4 = nn.ConvTranspose2d(2, 128, 5, stride=2)
-        self.bn4 = nn.BatchNorm2d(128, eps=batch_norm)
+        self.conv4 = nn.ConvTranspose2d(2, 64, 5, stride=2)
+        self.bn4 = nn.BatchNorm2d(64, eps=self.batch_norm)
 
-        self.conv5 = nn.ConvTranspose2d(128, 64, 8, stride=2, padding=1)
-        self.bn5 = nn.BatchNorm2d(64, eps=batch_norm)
+        self.conv5 = nn.ConvTranspose2d(64, 32, 8, stride=2, padding=1)
+        self.bn5 = nn.BatchNorm2d(32, eps=self.batch_norm)
 
-        self.conv6 = nn.ConvTranspose2d(64, 3, 8, stride=2, padding=1)
+        self.conv6 = nn.ConvTranspose2d(32, 3, 8, stride=2, padding=1)
 
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
