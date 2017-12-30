@@ -89,4 +89,4 @@ def train_unsup(train_loader, model, criterion, epoch, optimizer, is_gpu, args):
                        'tmp/image_' + str(epoch) + '_' + str(c) + '.png')
             c += 1
 
-    return losses
+    return losses.avg

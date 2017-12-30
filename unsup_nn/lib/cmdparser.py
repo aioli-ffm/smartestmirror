@@ -47,13 +47,13 @@ parser.add_argument('-optim', '--optimizer', default='ADAM',
                     help='Optimizer choice: ADAM / SGD')
 parser.add_argument('--epochs', default=10, type=int, metavar='N',
                     help='number of total epochs to run')
-parser.add_argument('-b', '--batch-size', default=64, type=int,
+parser.add_argument('-b', '--batch-size', default=32, type=int,
                     metavar='N', help='mini-batch size (default: 128)')
-parser.add_argument('-lr', '--learning-rate', default=0.001, type=float,
+parser.add_argument('-lr', '--learning-rate', default=1e-3, type=float,
                     metavar='LR', help='initial learning rate (default: 0.1)')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum (default 0.9)')
-parser.add_argument('-wd', '--weight-decay', default=5e-4, type=float,
+parser.add_argument('-wd', '--weight-decay', default=0, type=float,
                     metavar='W', help='weight decay (default: 5e-4)')
 parser.add_argument('-bn', '--batch-norm', default=1e-3, type=float,
                     metavar='BN', help='batch normalization (default 1e-3)')

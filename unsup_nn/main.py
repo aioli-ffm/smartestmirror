@@ -78,7 +78,6 @@ def main():
         loss = train_unsup(dataset.train_loader, model, criterion, epoch, optimizer, is_gpu, args)
 
         # remember best prec@1 and save checkpoint
-        # TODO: this might not be fully working yet - check!
         is_best = loss < best_loss
         best_loss = min(loss, best_loss)
         save_checkpoint({
