@@ -42,6 +42,7 @@ class CUSTOM:
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             #transforms.Lambda(lambda x: x.narrow(0, 0, 1)),  #one (not so nice) way of going to gray-scale
+            # color seems to be doing slightly better right now
             ])
 
         return train_transforms
