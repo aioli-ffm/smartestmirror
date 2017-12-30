@@ -33,5 +33,5 @@ class Net(nn.Module):
         out3 = out2.view(-1, 20*24*24)
         out4 = F.relu(self.fc1(out3))
         out5 = self.fc2(out4)
-        return F.log_softmax(x), out1,out2,out3,out4,out5
+        return F.log_softmax(out5), out1,out2,out3,out4,out5
 

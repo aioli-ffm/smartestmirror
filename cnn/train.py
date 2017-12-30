@@ -49,7 +49,7 @@ import sys
 import cv2
 import numpy as np
 
-basefolder = '/home/shared/data/all_extracted/'
+basefolder = './faces_classified/'
 # get all filenames for labels
 all_fnames = {}
 X_train = []
