@@ -6,6 +6,7 @@ import time
 import cec
 from services.Base import *
 
+
 class TV(Base):
 
     def __init__(self, serviceRunner):
@@ -16,16 +17,24 @@ class TV(Base):
         return {}
 
     def init(self):
-        #cec.init() # AttributeError: 'module' object has no attribute 'init'
-        #self.tv = cec.Device(cec.CECDEVICE_TV)
-        # MotionSensor.addCallback(self.callback)
-        pass
+        try:
+            cec.init()  # AttributeError: 'module' object has no attribute 'init'
+            self.tv = cec.Device(cec.CECDEVICE_TV)
+            self.serviceRunner.services["MotionSensor"].addCallback(
+                self.callback)
+            self.callback(True)
+        except Exception as e:
+            print("==================================")
+            print("Cannot take control of TV: ", e)
+            print("==================================")
 
     def update(self):
         pass
 
     def callback(self, isOn):
         if isOn:
+            print("----------------TV: power_on")
             self.tv.power_on()
         else:
-            self.tv.power_off()
+            print("----------------TV: standby")
+            self.tv.standby()

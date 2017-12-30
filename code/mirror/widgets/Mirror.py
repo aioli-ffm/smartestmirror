@@ -22,15 +22,15 @@ class Mirror(QLabel,Base):
         self.serviceRunner = serviceRunner
         self.parent = parent
         self.downloadHaarcascade()
-        self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        self.face_cascade = cv2.CascadeClassifier('./supplementary/haarcascade_frontalface_default.xml')
         self.zoomFace = True
 
     def downloadHaarcascade(self):
         import urllib
-        if not os.path.isfile("haarcascade_frontalface_default.xml"): 
-            print "Downloading Haarcascade"
+        if not os.path.isfile("./supplementary/haarcascade_frontalface_default.xml"): 
+            print("Downloading Haarcascade")
             testfile = urllib.URLopener()
-            testfile.retrieve("https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml", "haarcascade_frontalface_default.xml")
+            testfile.retrieve("https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml", "./supplementary/haarcascade_frontalface_default.xml")
 
     def setimg(self,img):
         img = np.require(img, np.uint8, 'C')
