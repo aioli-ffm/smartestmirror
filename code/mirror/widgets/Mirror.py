@@ -28,7 +28,7 @@ class Mirror(QLabel,Base):
     def downloadHaarcascade(self):
         import urllib
         if not os.path.isfile("./supplementary/haarcascade_frontalface_default.xml"): 
-            print "Downloading Haarcascade"
+            print("Downloading Haarcascade")
             testfile = urllib.URLopener()
             testfile.retrieve("https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml", "./supplementary/haarcascade_frontalface_default.xml")
 
