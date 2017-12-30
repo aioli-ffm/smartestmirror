@@ -34,7 +34,8 @@ class Predictor:
 	    scaleFactor=1.1,
 	    minNeighbors=5,
 	    minSize=(50, 50),
-	    flags=cv2.cv.CV_HAAR_SCALE_IMAGE
+	    #flags=cv2.cv.CV_HAAR_SCALE_IMAGE
+	    flags=cv2.CASCADE_SCALE_IMAGE
 	)
 
         print("Found %d faces" % (len(faces)))
@@ -46,31 +47,40 @@ class Predictor:
 	    self.patches.append(np.array(patch.astype(np.float32)))
 	    self.coordinates.append([x,x+w,y,y+h])
 
-    def setImage(self,imagefilename):
+    def setImageFname(self,imagefilename):
         self.img = cv2.imread(imagefilename)
         self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+
+    def setImage(self,img):
+        self.img = img
+        if self.img.shape[2] is not None:
+            self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        else:
+            self.gray = self.img
 
     def pred(self):
         if len(self.patches) > 0:
             # get random image patch
             patch_data = torch.from_numpy(np.array([self.patches]))
             data = Variable(patch_data, volatile=True)
-            outputs = self.model(data)
+            ret = self.model(data)
+            outputs = ret[0]
             for idx,output in enumerate(outputs):
                 pred = np.argmax(output.cpu().data.numpy())
-                x = self.coordinates[idx][0]
-                y = self.coordinates[idx][2]
-                x2 = self.coordinates[idx][1]
-                y2 = self.coordinates[idx][3]
-                cv2.rectangle(self.img, (x,y),(x2,y2), (255,0,255),2)
-                print(mylabels[pred])
-        cv2.imshow("face",self.img)
-        cv2.waitKey(0)
+                #x = self.coordinates[idx][0]
+                #y = self.coordinates[idx][2]
+                #x2 = self.coordinates[idx][1]
+                #y2 = self.coordinates[idx][3]
+                #cv2.rectangle(self.img, (x,y),(x2,y2), (255,0,255),2)
+                #print(mylabels[pred])
+        #cv2.imshow("face",self.img)
+        #cv2.waitKey(0)
+        return ret
 
 #files = glob.glob("/home/shared/data/faces/sequences/Tobi/*.png")
 files = glob.glob("/home/shared/data/faces/sequences/Timm/*.png")
 Pred = Predictor()
 for f in files:
-    Pred.setImage(f)
+    Pred.setImageFname(f)
     Pred.extractFace()
     Pred.pred()

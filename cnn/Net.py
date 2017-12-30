@@ -27,11 +27,11 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(50, len(mylabels))
 
     def forward(self, x):
-        x = F.relu(self.conv1(x))
-        x = F.relu(self.conv2(x))
+        out1 = F.relu(self.conv1(x))
+        out2 = F.relu(self.conv2(out1))
         #print("x:",x)
-        x = x.view(-1, 20*24*24)
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-        return F.log_softmax(x)
+        out3 = out2.view(-1, 20*24*24)
+        out4 = F.relu(self.fc1(out3))
+        out5 = self.fc2(out4)
+        return F.log_softmax(x), out1,out2,out3,out4,out5
 
