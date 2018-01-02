@@ -12,40 +12,30 @@ class CAE(nn.Module):
 
         self.batch_norm = batch_norm
 
-        self.conv1 = nn.Conv2d(3, 64, 8, stride=2, padding=1)
-        self.bn1 = nn.BatchNorm2d(64, eps=self.batch_norm)
+        self.conv1 = nn.Conv2d(3, 32, 8, stride=2, padding=1)
+        self.bn1 = nn.BatchNorm2d(32, eps=self.batch_norm)
         self.act1 = nn.ReLU(True)
 
-        self.conv2 = nn.Conv2d(64, 64, 8, stride=2, padding=1)
-        self.bn2 = nn.BatchNorm2d(64, eps=self.batch_norm)
-        self.act2 = nn.ReLU(True)
+        self.conv2 = nn.Conv2d(32, 7, 8, stride=2)
 
-        self.conv3 = nn.Conv2d(64, 64, 5, stride=2)
-
-        self.dconv1 = nn.ConvTranspose2d(64, 64, 5, stride=2)
-        self.dbn1 = nn.BatchNorm2d(64, eps=self.batch_norm)
+        self.dconv1 = nn.ConvTranspose2d(7, 32, 8, stride=2)
+        self.dbn1 = nn.BatchNorm2d(32, eps=self.batch_norm)
         self.dact1 = nn.ReLU(True)
 
-        self.dconv2 = nn.ConvTranspose2d(64, 32, 8, stride=2, padding=1)
-        self.dbn2 = nn.BatchNorm2d(32, eps=self.batch_norm)
-        self.dact2 = nn.ReLU(True)
+        self.dconv2 = nn.ConvTranspose2d(32, 3, 8, stride=2, padding=1)
 
-        self.dconv3 = nn.ConvTranspose2d(32, 3, 8, stride=2, padding=1)
-        self.dact3 = nn.Sigmoid()
+        self.dact2 = nn.Sigmoid()
 
     def encode(self, x):
         h1 = self.act1(self.bn1(self.conv1(x)))
-        h2 = self.act2(self.bn2(self.conv2(h1)))
-        h3 = self.conv3(h2)
+        h2 = self.conv2(h1)
 
-        return h3
+        return h2
 
     def decode(self, x):
         dh1 = self.dact1(self.dbn1(self.dconv1(x)))
-        dh2 = self.dact2(self.dbn2(self.dconv2(dh1)))
-        dh3 = self.dact3(self.dconv3(dh2))
-
-        return dh3
+        dh2 = self.dact2(self.dconv2(dh1))
+        return dh2
 
     def forward(self, x):
         x = self.encode(x)
@@ -63,30 +53,23 @@ class VCAE(nn.Module):
         self.conv1 = nn.Conv2d(3, 32, 8, stride=2, padding=1)
         self.bn1 = nn.BatchNorm2d(32, eps=self.batch_norm)
 
-        self.conv2 = nn.Conv2d(32, 64, 8, stride=2, padding=1)
-        self.bn2 = nn.BatchNorm2d(64, eps=self.batch_norm)
+        self.conv21 = nn.Conv2d(32, 7, 8, stride=2)
+        self.conv22 = nn.Conv2d(32, 7, 8, stride=2)
 
-        self.conv31 = nn.Conv2d(64, 2, 5, stride=2)
-        self.conv32 = nn.Conv2d(64, 2, 5, stride=2)
+        self.dconv1 = nn.ConvTranspose2d(7, 32, 8, stride=2)
+        self.dbn1 = nn.BatchNorm2d(32, eps=self.batch_norm)
 
-        self.conv4 = nn.ConvTranspose2d(2, 64, 5, stride=2)
-        self.bn4 = nn.BatchNorm2d(64, eps=self.batch_norm)
-
-        self.conv5 = nn.ConvTranspose2d(64, 32, 8, stride=2, padding=1)
-        self.bn5 = nn.BatchNorm2d(32, eps=self.batch_norm)
-
-        self.conv6 = nn.ConvTranspose2d(32, 3, 8, stride=2, padding=1)
+        self.dconv2 = nn.ConvTranspose2d(32, 3, 8, stride=2, padding=1)
 
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
 
     def encode(self, x):
         h1 = self.relu(self.bn1(self.conv1(x)))
-        h2 = self.relu(self.bn2(self.conv2(h1)))
-        h31 = self.conv31(h2)
-        h32 = self.conv32(h2)
+        h21 = self.conv21(h1)
+        h22 = self.conv22(h1)
 
-        return h31, h32
+        return h21, h22
 
     def reparameterize(self, mu, logvar):
         if self.training:
@@ -97,9 +80,8 @@ class VCAE(nn.Module):
             return mu
 
     def decode(self, z):
-        h4 = self.relu(self.bn4(self.conv4(z)))
-        h5 = self.relu(self.bn5(self.conv5(h4)))
-        z = self.sigmoid(self.conv6(h5))
+        dh1 = self.relu(self.dbn1(self.dconv1(z)))
+        z = self.sigmoid(self.dconv2(dh1))
 
         return z
 
