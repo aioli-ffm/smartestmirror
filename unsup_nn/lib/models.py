@@ -12,32 +12,40 @@ class CAE(nn.Module):
 
         self.batch_norm = batch_norm
 
-        self.Encoder = nn.Sequential(
-            nn.Conv2d(3, 32, 8, stride=2, padding=1),
-            nn.BatchNorm2d(32, eps=self.batch_norm),
-            nn.ReLU(True),
-            nn.Conv2d(32, 64, 8, stride=2, padding=1),
-            nn.BatchNorm2d(64, eps=self.batch_norm),
-            nn.ReLU(True),
-            nn.Conv2d(64, 64, 5, stride=2)
-        )
+        self.conv1 = nn.Conv2d(3, 64, 8, stride=2, padding=1)
+        self.bn1 = nn.BatchNorm2d(64, eps=self.batch_norm)
+        self.act1 = nn.ReLU(True)
 
-        self.Decoder = nn.Sequential(
-            nn.ConvTranspose2d(64, 64, 5, stride=2),
-            nn.BatchNorm2d(64, eps=self.batch_norm),
-            nn.ReLU(True),
-            nn.ConvTranspose2d(64, 32, 8, stride=2, padding=1),
-            nn.BatchNorm2d(32, eps=self.batch_norm),
-            nn.ReLU(True),
-            nn.ConvTranspose2d(32, 3, 8, stride=2, padding=1),
-            nn.Sigmoid()
-        )
+        self.conv2 = nn.Conv2d(64, 64, 8, stride=2, padding=1)
+        self.bn2 = nn.BatchNorm2d(64, eps=self.batch_norm)
+        self.act2 = nn.ReLU(True)
+
+        self.conv3 = nn.Conv2d(64, 64, 5, stride=2)
+
+        self.dconv1 = nn.ConvTranspose2d(64, 64, 5, stride=2)
+        self.dbn1 = nn.BatchNorm2d(64, eps=self.batch_norm)
+        self.dact1 = nn.ReLU(True)
+
+        self.dconv2 = nn.ConvTranspose2d(64, 32, 8, stride=2, padding=1)
+        self.dbn2 = nn.BatchNorm2d(32, eps=self.batch_norm)
+        self.dact2 = nn.ReLU(True)
+
+        self.dconv3 = nn.ConvTranspose2d(32, 3, 8, stride=2, padding=1)
+        self.dact3 = nn.Sigmoid()
 
     def encode(self, x):
-        return self.Encoder(x)
+        h1 = self.act1(self.bn1(self.conv1(x)))
+        h2 = self.act2(self.bn2(self.conv2(h1)))
+        h3 = self.conv3(h2)
+
+        return h3
 
     def decode(self, x):
-        return self.Decoder(x)
+        dh1 = self.dact1(self.dbn1(self.dconv1(x)))
+        dh2 = self.dact2(self.dbn2(self.dconv2(dh1)))
+        dh3 = self.dact3(self.dconv3(dh2))
+
+        return dh3
 
     def forward(self, x):
         x = self.encode(x)
