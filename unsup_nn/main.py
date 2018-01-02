@@ -65,7 +65,7 @@ def main():
                                     momentum=args.momentum,
                                     weight_decay=args.weight_decay)
 
-    save_path = 'runs/' + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + \
+    save_path = 'runs/' + strftime("%Y-%m-%d_%H:%M:%S", gmtime()) + \
                 ';' + args.architecture
     os.mkdir(save_path)
 
@@ -84,7 +84,7 @@ def main():
             'epoch': epoch,
             'arch': args.architecture,
             'state_dict': model.state_dict(),
-            'best_prec': best_loss,
+            'best_loss': best_loss,
             'optimizer': optimizer.state_dict(),
         }, is_best, save_path)
 

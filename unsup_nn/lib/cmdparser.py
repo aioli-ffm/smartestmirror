@@ -30,7 +30,7 @@ parser.add_argument('-data', '--data-dir', metavar='DATADIR',
                     help='path to dataset')
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
-parser.add_argument('-p', '--patch-size', default=96, type=int,
+parser.add_argument('-p', '--patch-size', default=32, type=int,
                     metavar='P', help='length of shorter side for patches')
 
 

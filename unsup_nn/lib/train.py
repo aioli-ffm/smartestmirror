@@ -92,11 +92,15 @@ def train_unsup(train_loader, model, criterion, epoch, optimizer, is_gpu, args):
                        'tmp/recon_epoch_' + str(epoch) + '_' + str(c) + '.png')
             c += 1
 
+    """
+    # Removing this temporarily because of need for sequential containers in inference 
+    # in order to differentiate between encoder and decoder
     # TODO: Plotting should be correct, but weights look off. Find fix.
     # visualization of first layer's filters
     conv1weight = model.conv1.weight.data
     if is_gpu:
         conv1weight = conv1weight.cpu()
     plot_kernels(conv1weight.transpose(1, 3).numpy(), 'tmp/weights_epoch_' + str(epoch) + '.png')
+    """
 
     return losses.avg
