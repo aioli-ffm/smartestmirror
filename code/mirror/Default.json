@@ -37,5 +37,14 @@
         "h": 1920,
         "Interval": 100,
         "style":""
+    },
+    "GMail": {
+        "y": "200",
+        "x": "100",
+        "Interval": 6,
+        "widget_name": "GMail",
+        "results":3,
+        "api_key": "XXXXX",
+        "calendar": "de.german#holiday@group.v.calendar.google.com"
     }
 }
