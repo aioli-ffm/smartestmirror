@@ -29,31 +29,31 @@ import requests
 # https://developers.google.com/google-apps/calendar/quickstart/python
 # https://console.developers.google.com/apis/credentials?project=coral-firefly-192215
 
-class GMail(QLabel, Base):
+
+class Calendar(QLabel, Base):
 
     calendar_service = None
-    mail_service = None
     labeltext = ''
     """
-    Display GMail and Calendar
+    Display Google Calendar
     """
 
     def __init__(self, title, parent, serviceRunner):
-        super(GMail, self).__init__(title, parent)
+        super(Calendar, self).__init__(title, parent)
         self.parent = parent
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAlignment(Qt.AlignCenter)
         self.setStyleSheet("color: rgb(255,255,255);")
 
     def defaultConfig(self):
-        return {"x": 50, "y": 900, "Interval": 10, "api_key": "XXXXX", "calendar": "primary", "results":3}
+        return {"x": 50, "y": 900, "Interval": 10, "api_key": "XXXXX", "calendar": "primary", "results": 3}
 
     def init(self):
         try:
-            self.calendar_service = discovery.build('calendar', 'v3', developerKey=self.config["api_key"])
-            self.mail_service = discovery.build('gmail', 'v1', developerKey=self.config["api_key"])
-        except Exception,e:
-            print('exception in GMail module',e)
+            self.calendar_service = discovery.build(
+                'calendar', 'v3', developerKey=self.config["api_key"])
+        except Exception, e:
+            print('exception in Calendar module', e)
 
     def settext(self, text):
         self.setText(text)
@@ -70,16 +70,9 @@ class GMail(QLabel, Base):
             self.labeltext = 'No upcoming events found.'
         for event in events:
             start = event['start'].get('dateTime', event['start'].get('date'))
-            self.labeltext = self.labeltext + str(start) + ' ' + event['summary']
+            self.labeltext = self.labeltext + \
+                str(start) + ' ' + event['summary']
             self.labeltext = self.labeltext + '\n'
-
-    def setmails(self, messages):
-        if not messages:
-            self.labeltext = 'No messages found.'
-        for message in messages:
-            self.labeltext = self.labeltext + message['title']
-            self.labeltext = self.labeltext + '\n'
-        
 
     def updatecalendar(self):
         try:
@@ -90,20 +83,10 @@ class GMail(QLabel, Base):
             events = eventsResult.get('items', [])
 
             self.setevents(events)
-        except Exception,e:
-            print('exception in GMail module',e)
-
-    def updatemail(self):
-        try:
-            results = self.mail_service.users().messages().list(userId='me', maxResults=self.config["results"]).execute()
-            messages = results.get('messages', [])
-            self.setmails(messages)
-        except Exception,e:
-            print('exception in GMail module',e)
+        except Exception, e:
+            print('exception in GMail module', e)
 
     def update(self):
         self.labeltext = ''
         self.updatecalendar()
-        self.updatemail()
         self.settext(self.labeltext)
-
