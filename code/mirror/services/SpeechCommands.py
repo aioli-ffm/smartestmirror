@@ -4,35 +4,72 @@ author: Christian M
 '''
 import serial
 import time
+import os
+import zipfile
 from services.Base import *
 import speech_recognition as sr
 
+
 class SpeechCommands(Base):
+
+    modelfile = 'speech_commands_v0.01.zip'
+    modelurl = 'http://download.tensorflow.org/models/speech_commands_v0.01.zip'
+    callbacks = {}
 
     def __init__(self, serviceRunner):
         super(SpeechCommands, self).__init__()
         self.serviceRunner = serviceRunner
         self.callbacks = {}
         self.config = self.defaultConfig()
+        self.downloadmodel()
+
+    def downloadmodel(self):
+        import urllib
+        if not os.path.isfile("./supplementary/" + self.modelfile):
+            print("Downloading Speech Commands model")
+            testfile = urllib.URLopener()
+            testfile.retrieve(
+                self.modelurl, "./supplementary/" + self.modelfile)
+            modelzip = zipfile.ZipFile(
+                "./supplementary/" + self.modelfile, 'r')
+            modelzip.extractall("./supplementary/")
+            modelzip.close()
 
     def defaultConfig(self):
-        return {"graph":"conv_actions_frozen.pb", "labels":"conv_actions_labels.txt", "Interval": 100}
+        return {"graph": "conv_actions_frozen.pb", "labels": "conv_actions_labels.txt", "Interval": 100}
 
     def init(self):
         self.r = sr.Recognizer()
         self.m = sr.Microphone()
-        #with self.m as source:
-        #    self.r.adjust_for_ambient_noise(source)
-        #self.stop_listening = self.r.listen_in_background(self.m, self.callback)
+        with self.m as source:
+            self.r.adjust_for_ambient_noise(source)
+        self.stop_listening = self.r.listen_in_background(
+            self.m, self.callback)
 
     def callback(self, recognizer, audio):
         try:
-            spoken = recognizer.recognize_tensorflow(audio, tensor_graph=self.config.graph, tensor_label=self.config.labels)
+            from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
+            graph = "./supplementary/" + str(self.config["graph"])
+            labels = "./supplementary/" + str(self.config["labels"])
+            spoken = recognizer.recognize_tensorflow(
+                audio, tensor_graph=graph, tensor_label=labels)
             print(spoken)
         except sr.UnknownValueError:
             print("Tensorflow could not understand audio")
         except sr.RequestError as e:
-            print("Could not request results from Tensorflow service; {0}".format(e))
+            print(
+                "Could not request results from Tensorflow service; {0}".format(e))
+
+    def executeCallbacks(self, command):
+        try:
+            callbacklist = self.callbacks[command]
+            for callback in callbacklist:
+                try:
+                    callback(command)
+                except Exception as e:
+                    print(e)
+        except Exception as e:
+            print(e)
 
     def addCallback(self, command, callback):
         callbacklist = []
@@ -40,4 +77,5 @@ class SpeechCommands(Base):
             callbacklist = self.callbacks[command]
         except Exception:
             pass
+        callbacklist.append(callback)
         self.callbacks[command] = callbacklist

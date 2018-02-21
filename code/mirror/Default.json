@@ -19,7 +19,7 @@
         "Currency": "EUR"
     },
     "Mirror": {
-        "y": "1262",
+        "y": "100",
         "x": "326",
         "Interval": 0.1,
         "widget_name": "Mirror"
@@ -30,12 +30,32 @@
         "Interval": 1,
         "widget_name": "TimerText"
     },
-    "Display":{
+    "Display": {
         "x": 0,
         "y": 0,
         "w": 1080,
         "h": 1920,
         "Interval": 100,
-        "style":""
+        "style": ""
+    },
+    "Calendar": {
+        "y": "200",
+        "x": "100",
+        "Interval": 6,
+        "widget_name": "Calendar",
+        "results": 3,
+        "api_key": "XXXXX",
+        "calendar": "de.german#holiday@group.v.calendar.google.com"
+    },
+    "Mail": {
+        "x": 250,
+        "y": 900,
+        "Interval": 600,
+        "server": "imap.server.example.de",
+        "port": 993,
+        "username": "user",
+        "password": "pass",
+        "results": 3,
+        "mailbox": "INBOX"
     }
 }
