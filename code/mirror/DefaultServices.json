@@ -6,10 +6,7 @@
         "widget_name": "Webcam",
         "y": "20",
         "x": "1300",
-        "device": 0
-    },
-    "FaceRecog": {
-        "Interval": "0.5"
+        "device":1
     },
     "MotionSensor": {
         "y": 0,
@@ -23,10 +20,5 @@
     },
     "TV": {
         "Interval": 1
-    },
-    "SpeechCommands": {
-        "graph": "conv_actions_frozen.pb",
-        "labels": "conv_actions_labels.txt",
-        "Interval": 100
     }
 }

@@ -20,8 +20,7 @@ class TV(Base):
         try:
             cec.init()  # AttributeError: 'module' object has no attribute 'init'
             self.tv = cec.Device(cec.CECDEVICE_TV)
-            self.serviceRunner.services["MotionSensor"].addCallback(
-                self.callback)
+            self.serviceRunner.services["MotionSensor"].addCallback(self.callback)
             self.callback(True)
         except Exception as e:
             print("==================================")
