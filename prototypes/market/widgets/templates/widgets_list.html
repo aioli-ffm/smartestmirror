@@ -1,0 +1,8 @@
+<h1>Widgets</h1>
+<ul>
+{% for widget in object_list %}
+    <li><a href="{{ widget }}">{{ widget }}</a></li>
+{% empty %}
+    <li>No Widgets.</li>
+{% endfor %}
+</ul>

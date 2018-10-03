@@ -24,11 +24,15 @@ class Mirror(QLabel,Base):
         self.downloadHaarcascade()
         self.face_cascade = cv2.CascadeClassifier('./supplementary/haarcascade_frontalface_default.xml')
         self.zoomFace = True
+        self.serviceRunner.get("SpeechCommands").addCallback("on", self.command_callback)
+
+    def command_callback(self, _):
+        self.zoomFace = not self.zoomFace
 
     def downloadHaarcascade(self):
         import urllib
         if not os.path.isfile("./supplementary/haarcascade_frontalface_default.xml"): 
-            print "Downloading Haarcascade"
+            print("Downloading Haarcascade")
             testfile = urllib.URLopener()
             testfile.retrieve("https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml", "./supplementary/haarcascade_frontalface_default.xml")
 

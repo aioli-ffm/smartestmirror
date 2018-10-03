@@ -29,10 +29,13 @@ class ServiceRunner(object):
         for importer,modname,ispkg in pkgutil.iter_modules(services.__path__):
             if modname != "Base":
                 print("Found service %s" % modname)
-                mod = importlib.import_module("services."+modname)
-                class_ = getattr(mod, modname)
-                instance = class_(self)
-                self.services[modname] = instance
+                try:
+                    mod = importlib.import_module("services."+modname)
+                    class_ = getattr(mod, modname)
+                    instance = class_(self)
+                    self.services[modname] = instance
+                except Exception,e:
+                    print('module exception in '+ modname,e)
 
     def configServices(self, profile="DefaultServices.json"):
         self.config.load(self.services.values(), profile)

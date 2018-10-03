@@ -17,6 +17,7 @@ class FaceRecog(Base):
 
     def update(self):
         # try to find and recognize face(s)
-        self.predictor.setImage(self.serviceRunner.services["Webcam"].currentImage())
-        self.predictor.extractFace(save=True)
-        predictions = self.predictor.pred()
+        if self.serviceRunner.services["Webcam"].currentImage() is not None:
+            self.predictor.setImage(self.serviceRunner.services["Webcam"].currentImage())
+            self.predictor.extractFace(save=True)
+            predictions = self.predictor.pred()

@@ -11,8 +11,8 @@ import lib.models as architectures
 import lib.datasets as datasets
 from lib.cmdparser import parser
 from lib.initialization import WeightInit
-from lib.utility import save_checkpoint
 from lib.train import train_unsup
+from lib.utility import save_checkpoint
 
 
 def main():
@@ -65,7 +65,7 @@ def main():
                                     momentum=args.momentum,
                                     weight_decay=args.weight_decay)
 
-    save_path = 'runs/' + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + \
+    save_path = 'runs/' + strftime("%Y-%m-%d_%H:%M:%S", gmtime()) + \
                 ';' + args.architecture
     os.mkdir(save_path)
 
@@ -78,18 +78,17 @@ def main():
         loss = train_unsup(dataset.train_loader, model, criterion, epoch, optimizer, is_gpu, args)
 
         # remember best prec@1 and save checkpoint
-        # TODO: this might not be fully working yet - check!
         is_best = loss < best_loss
         best_loss = min(loss, best_loss)
         save_checkpoint({
             'epoch': epoch,
             'arch': args.architecture,
             'state_dict': model.state_dict(),
-            'best_prec': best_loss,
+            'best_loss': best_loss,
             'optimizer': optimizer.state_dict(),
         }, is_best, save_path)
 
-        # increment epoch counters
+        # increment epoch counter
         epoch += 1
 
 if __name__ == '__main__':

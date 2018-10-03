@@ -3,6 +3,7 @@ import torch
 from lib.utility import AverageMeter
 from torchvision.utils import save_image
 from torch.nn import functional as F
+from lib.utility import plot_kernels
 
 
 def train_unsup(train_loader, model, criterion, epoch, optimizer, is_gpu, args):
@@ -76,6 +77,7 @@ def train_unsup(train_loader, model, criterion, epoch, optimizer, is_gpu, args):
         batch_time.update(time.time() - end)
         end = time.time()
 
+        # logging and visualization
         if i % args.print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
@@ -84,9 +86,21 @@ def train_unsup(train_loader, model, criterion, epoch, optimizer, is_gpu, args):
                    epoch, i, len(train_loader), batch_time=batch_time,
                    data_time=data_time, loss=losses))
 
-            # TODO: do not print every mini-batch
+            # TODO: bad path hard-coding here
+            # TODO: do not print every mini-batch?
             save_image(output.cpu().data.view(args.batch_size, 3, args.patch_size, args.patch_size),
-                       'tmp/image_' + str(epoch) + '_' + str(c) + '.png')
+                       'tmp/recon_epoch_' + str(epoch) + '_' + str(c) + '.png')
             c += 1
 
-    return losses
+    """
+    # Removing this temporarily because of need for sequential containers in inference 
+    # in order to differentiate between encoder and decoder
+    # TODO: Plotting should be correct, but weights look off. Find fix.
+    # visualization of first layer's filters
+    conv1weight = model.conv1.weight.data
+    if is_gpu:
+        conv1weight = conv1weight.cpu()
+    plot_kernels(conv1weight.transpose(1, 3).numpy(), 'tmp/weights_epoch_' + str(epoch) + '.png')
+    """
+
+    return losses.avg

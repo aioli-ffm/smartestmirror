@@ -2,3 +2,4 @@
 .vscode/
 prototypes/test.json
 haarcascade_frontalface_default.xml
+prototypes/market/widgets/migrations/*

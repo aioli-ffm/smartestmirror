@@ -30,7 +30,7 @@ parser.add_argument('-data', '--data-dir', metavar='DATADIR',
                     help='path to dataset')
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
-parser.add_argument('-p', '--patch-size', default=64, type=int,
+parser.add_argument('-p', '--patch-size', default=96, type=int,
                     metavar='P', help='length of shorter side for patches')
 
 
@@ -45,15 +45,15 @@ parser.add_argument('--weight-init', default='kaiming-normal', metavar='W',
 # Training hyper-parameters
 parser.add_argument('-optim', '--optimizer', default='ADAM',
                     help='Optimizer choice: ADAM / SGD')
-parser.add_argument('--epochs', default=10, type=int, metavar='N',
+parser.add_argument('--epochs', default=20, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('-b', '--batch-size', default=64, type=int,
-                    metavar='N', help='mini-batch size (default: 128)')
-parser.add_argument('-lr', '--learning-rate', default=0.001, type=float,
-                    metavar='LR', help='initial learning rate (default: 0.1)')
+                    metavar='N', help='mini-batch size (default: 64)')
+parser.add_argument('-lr', '--learning-rate', default=1e-3, type=float,
+                    metavar='LR', help='initial learning rate (default: 0.001)')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum (default 0.9)')
-parser.add_argument('-wd', '--weight-decay', default=5e-4, type=float,
+parser.add_argument('-wd', '--weight-decay', default=0, type=float,
                     metavar='W', help='weight decay (default: 5e-4)')
 parser.add_argument('-bn', '--batch-norm', default=1e-3, type=float,
                     metavar='BN', help='batch normalization (default 1e-3)')
