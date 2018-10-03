@@ -71,7 +71,7 @@ class WidgetRunner(object):
             except Exception as e:
                 widget.hide()
                 print("No position info for module %s"%widget)
-                print("Exception: ", e)
+                print("[WidgetRunner] Exception: ", e)
 
     def startWidgets(self):
         for widget in self.widgets.values():
