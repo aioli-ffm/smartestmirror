@@ -48,7 +48,7 @@ class MotionSensor(Base):
             if "0" not in res and self.state == 0:
                 self.execOn()
         except Exception as e:
-            print("Exception: ", e)
+            print("[Motionsensor] Exception: ", e)
 
     def execOn(self):
 	print("----Motionsensing: Turning TV on")
