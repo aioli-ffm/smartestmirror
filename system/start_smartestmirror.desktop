@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec="/home/nvidia/code/smartestmirror/system/startup_smartestmirror.sh"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=StartupSmartestmirror
