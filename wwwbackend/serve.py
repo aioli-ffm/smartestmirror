@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index(name="Tobi"):
-    configvalues = json.load(open('../prototypes/Default.json'))
+    configvalues = json.load(open('../code/mirror/Default.json'))
     configentries = []
 
     # FIXME: check if python2 or python3 (iteritems does not exist in py3 anymore)
@@ -33,7 +33,7 @@ def handle_data():
     which contains the name of the input to match it against the config-file
     '''
     # load original config-file again
-    configvalues = json.load(open('../prototypes/Default.json'))
+    configvalues = json.load(open('../code/mirror/Default.json'))
 
     # get all set fields and put them into the json
     changed_widget_name = request.form['widget_name']
@@ -43,7 +43,7 @@ def handle_data():
 	configvalues[changed_widget_name][k] = v
 
     # write the new values to it
-    with open('../prototypes/Default.json', 'w') as outfile:
+    with open('../code/mirror/Default.json', 'w') as outfile:
 	json.dump(configvalues, outfile)
 
     # this needs to return something
