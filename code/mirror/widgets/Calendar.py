@@ -53,7 +53,7 @@ class Calendar(QLabel, Base):
             self.calendar_service = discovery.build(
                 'calendar', 'v3', developerKey=self.config["api_key"])
         except Exception, e:
-            print('exception in Calendar module', e)
+            print('[Exception Calendar Widget', e)
 
     def settext(self, text):
         self.setText(text)
@@ -84,7 +84,7 @@ class Calendar(QLabel, Base):
 
             self.setevents(events)
         except Exception, e:
-            print('exception in GMail module', e)
+            print('[Exception Calendar Widget', e)
 
     def update(self):
         self.labeltext = ''
