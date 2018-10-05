@@ -100,7 +100,7 @@ class Mail(QLabel, Base):
                         mails.append(subject)
             self.setmails(mails)
         except Exception, e:
-            print('exception in mail module', e)
+            print('[Exception Mail Widget] ', e)
 
     def update(self):
         self.labeltext = ''
