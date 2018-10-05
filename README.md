@@ -2,5 +2,4 @@
 what's smarter than smart?
 
 ## Website
-The official website to this project can be found here:
-![www.smartestmirror.com](http://www.smartestmirror.com)
+The official website to this project can be found here: http://www.smartestmirror.com
