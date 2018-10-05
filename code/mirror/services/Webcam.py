@@ -22,6 +22,9 @@ class Webcam(Base):
         if not self.capture.isOpened():
             print("Could not open camera ", self.config['device'])
         else:
+            self.capture.set(3,self.config["resx"])
+            self.capture.set(4,self.config["resy"])
+
             ret, self.image = self.capture.read()
 
     def update(self):
