@@ -1,4 +1,6 @@
 django
+oauth2client
+psutil
 pyaudio
 pyserial
 #SpeechRecognition
