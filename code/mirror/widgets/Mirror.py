@@ -22,8 +22,10 @@ class Mirror(QLabel,Base):
         self.serviceRunner = serviceRunner
         self.parent = parent
         self.downloadHaarcascade()
-        self.face_cascade = cv2.CascadeClassifier('./supplementary/haarcascade_frontalface_default.xml')
+        self.detectFace = True
         self.zoomFace = True
+        if self.detectFace:
+            self.face_cascade = cv2.CascadeClassifier('./supplementary/haarcascade_frontalface_default.xml')
         self.serviceRunner.get("SpeechCommands").addCallback("on", self.command_callback)
 
     def command_callback(self, _):
@@ -47,9 +49,15 @@ class Mirror(QLabel,Base):
         if img is not None:
             mirror_color = cv2.flip(img,1)
             gray = cv2.cvtColor(mirror_color, cv2.COLOR_BGR2GRAY)
-            faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
-            self.setimg(mirror_color) # show img if no face is found
-            if self.zoomFace:
+
+            faces = []
+            if self.detectFace:
+                faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
+
+            if len(faces) == 0:
+                self.setimg(mirror_color) # show img if no face is found
+
+            if self.zoomFace and self.detectFace:
                 for (x,y,w,h) in faces:
                     roi_color = mirror_color[y:y+h, x:x+w]
                     height, width = mirror_color.shape[:2]
