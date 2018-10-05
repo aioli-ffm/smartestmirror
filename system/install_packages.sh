@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt-get install python-pyqt5 libcec-dev espeak python-yaml cmake
+sudo apt-get install portaudio19-dev python-pip python-requests python-pyqt5 libcec-dev espeak python-yaml cmake
 
 # build torch (only on TX2)
 #git clone http://github.com/pytorch/pytorch
