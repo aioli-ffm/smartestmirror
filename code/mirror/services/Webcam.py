@@ -3,8 +3,8 @@
 author: Christian M
 '''
 import cv2
+import numpy as np
 from services.Base import *
-
 
 class Webcam(Base):
 
@@ -21,6 +21,10 @@ class Webcam(Base):
         self.capture = cv2.VideoCapture(self.config['device'])
         if not self.capture.isOpened():
             print("Could not open camera ", self.config['device'])
+            img = np.zeros((self.config["resy"], self.config["resx"], 3), np.uint8)
+            img += np.array([0,255,0], np.uint8)
+            cv2.putText(img, 'No image, device %d'%(self.config["device"]), (10,self.config["resy"]/2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0),1)
+            self.image = img[:,::-1,:] #will be displayed mirrored
         else:
             self.capture.set(3,self.config["resx"])
             self.capture.set(4,self.config["resy"])
