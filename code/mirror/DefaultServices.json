@@ -1,7 +1,7 @@
 {
     "Webcam": {
-        "resx": "320",
-        "resy": "240",
+        "resx": 320,
+        "resy": 240,
         "Interval": "0.1",
         "widget_name": "Webcam",
         "y": "20",
