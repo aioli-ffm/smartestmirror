@@ -13,7 +13,7 @@ class ProfileManager(object):
         self.current = "Default"
 
     def load(self, profileName):
-        fileName = profileName+".json"
+        fileName = "./profiles/"+profileName+".json"
         '''
         self.servivceRunner.stopServices()
         self.servivceRunner.configServices(fileName)

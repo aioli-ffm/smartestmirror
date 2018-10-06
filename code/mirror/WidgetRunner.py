@@ -21,7 +21,7 @@ class WidgetRunner(object):
         #self.parent.setLayout(self.grid)
 
 
-    def init(self, profile="Default.json"):
+    def init(self, profile="./profiles/Default.json"):
 
         self.widgets = {}
         self.timers = []

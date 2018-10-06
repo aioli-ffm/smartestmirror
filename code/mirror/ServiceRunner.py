@@ -37,16 +37,16 @@ class ServiceRunner(object):
                 except Exception,e:
                     print('module exception in '+ modname,e)
 
-    def configServices(self, profile="DefaultServices.json"):
+    def configServices(self, profile="./profiles/DefaultServices.json"):
         self.config.load(self.services.values(), profile)
 
-    def initServices(self, profile="DefaultServices.json"):
+    def initServices(self, profile="./profiles/DefaultServices.json"):
         for service in self.services.values():
             if not self.config.isEnabled(service,profile):
                 continue
             service.init()
 
-    def startServices(self, profile="DefaultServices.json"):
+    def startServices(self, profile="./profiles/DefaultServices.json"):
         for service in self.services.values():
             if not self.config.isEnabled(service,profile):
                 continue
