@@ -23,5 +23,14 @@ The services, widgets and updaterates of these can be configured (for now) by ed
 ## User Profiles
 A profile manager is able to switch user-profiles on-the-fly. So by attaching a button (lame) or detecting the identity of users using face-detection and -recognition, these profiles can be switched to display personalized information.
 
+## System modules and interfaces
+![Smartmirror software](code/mirror/docs/Diagramm1.png)
+
 ## Current research
 We are currently working on fully unsupervised methods to learn the faces of the users of the mirror. The usecase we have in mind is the following: After being installed, all users should walk around in front of the mirror for some period of time, optimally covering a broad range of lighting-situations that will be encountered in production use. After that, our system will present the learned faces (which it is able to distinguish) in the backend, where users can name them and link them to personal profiles.
+
+## Contributing
+If you want to contribute, here are places to start:
+
+* Adding widgets and services: the source-code can be found in smartestmirror/code/mirror
+* If you would like to perform research, you can request sequences and face-datasets via email
