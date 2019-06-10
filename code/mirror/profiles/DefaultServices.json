@@ -11,7 +11,8 @@
     "MotionSensor": {
         "y": 0,
         "x": 0,
-        "Interval": 0.2
+        "Interval": 0.1,
+        "keep_on_time": 60
     },
     "TTS": {
         "voice": "en",

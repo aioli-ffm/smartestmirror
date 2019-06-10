@@ -47,6 +47,7 @@ class Mirror(QLabel,Base):
     def update(self):
         img = self.serviceRunner.get("Webcam").currentImage()
         if img is not None:
+
             mirror_color = cv2.flip(img,1)
             gray = cv2.cvtColor(mirror_color, cv2.COLOR_BGR2GRAY)
 
@@ -55,13 +56,45 @@ class Mirror(QLabel,Base):
                 faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
 
             if len(faces) == 0:
+                # scale for width
+                new_height = int(img.shape[0] / (img.shape[1]/float(self.config["width"])))
+       	        # resize for display
+                mirror_color = cv2.resize(mirror_color, (self.config["width"], new_height)) 
                 self.setimg(mirror_color) # show img if no face is found
 
             if self.zoomFace and self.detectFace:
-                for (x,y,w,h) in faces:
-                    roi_color = mirror_color[y:y+h, x:x+w]
-                    height, width = mirror_color.shape[:2]
-                    zoomed_color = cv2.resize(roi_color,(height, height), interpolation = cv2.INTER_CUBIC)
-                    self.setimg(zoomed_color)
+		new_img = np.zeros((img.shape[0], img.shape[1], 3), np.uint8)
+                # calc width for single pics
+                if len(faces) > 0:
+			single_width = int(self.config["width"]/float(len(faces)))
+                        #print("[Mirror] ----------------------- Length faces: ", len(faces))
+                        #print("[Mirror] Single width: ", single_width)
+                        idx = 0
+			for (x,y,w,h) in faces:
+                            #print("[Mirror]--- idx: ", idx)
+			    roi_color = mirror_color[y:y+h, x:x+w]
+			    height, width = mirror_color.shape[:2]
+
+			    new_height = int(roi_color.shape[0] / (roi_color.shape[1]/float(single_width)))
+                            #print("[Mirror] New height: ", new_height)
+
+                            # if its too large, rescale other dim also
+                            if new_height > new_img.shape[0]:
+                                new_width = int(roi_color.shape[1] / (roi_color.shape[0]/float(new_img.shape[0])))
+                                #print("[Mirror] New width: ", new_width)
+			        zoomed_color = cv2.resize(roi_color,(new_width, new_img.shape[0]), interpolation = cv2.INTER_CUBIC)
+                                new_img[:zoomed_color.shape[0],
+                                        idx*single_width:idx*single_width+new_width,
+                                        :] = zoomed_color
+                            else:
+			        zoomed_color = cv2.resize(roi_color,(single_width, new_height), interpolation = cv2.INTER_CUBIC)
+                                new_img[:zoomed_color.shape[0],
+                                        idx*single_width:(idx+1)*single_width,
+                                        :] = zoomed_color
+
+			    #zoomed_color = cv2.resize(roi_color,(height, height), interpolation = cv2.INTER_CUBIC)
+                            #print("[Mirror] Dim zoomed_color: ", zoomed_color.shape)
+                            idx += 1
+		        self.setimg(new_img)
         else:
-            print("None")
+            print("Image is None")

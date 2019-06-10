@@ -10,6 +10,12 @@ class Base(object):
     def __init__(self):
         super(Base, self).__init__()
         self.serviceRunner = None
+        self.config = {}
+
+    @classmethod
+    @abstractmethod
+    def defaultConfig(self):
+        return{"Interval":1}
 
     @classmethod
     @abstractmethod

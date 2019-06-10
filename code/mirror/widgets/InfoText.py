@@ -36,14 +36,28 @@ class InfoText(QLabel,Base):
         text = ""
         text = "Load: %.2f, %.2f, %.2f" % (loadavg[0], loadavg[1], loadavg[2]) # load over 1,5,15 minutes
         text += "\n"
-        temps = psutil.sensors_temperatures()
-        text += "Temp: %.2f C" % (temps["coretemp"][0][1])
-        text += "\n"
-        try:
-            nvidiatext += commands.getoutput("nvidia-smi -q -d TEMPERATURE | grep Current")
-            if not "not found" in nvidiatext:
-                text += nvidiatext
-                text += "\n"
-        except:
-            pass
+	# if not on tegra
+	try:
+		temps = psutil.sensors_temperatures()
+		text += "Temp: %.2f C" % (temps["coretemp"][0][1])
+		text += "\n"
+	except:
+		pass
+
+	# if on tegra
+	try:
+		temps = psutil.sensors_temperatures()
+		text += "CPU: %.2f C, GPU: %.2f C" % (temps['MCPU-therm'][0][1], temps['GPU-therm'][0][1])
+		text += "\n"
+	except:
+		pass
+
+	# if not on tegra and with GPU
+	try:
+	    nvidiatext += commands.getoutput("nvidia-smi -q -d TEMPERATURE | grep Current")
+	    if not "not found" in nvidiatext:
+		text += nvidiatext
+		text += "\n"
+	except:
+	    pass
         self.settext(text)

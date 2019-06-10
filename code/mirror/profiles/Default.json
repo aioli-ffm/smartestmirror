@@ -1,32 +1,33 @@
 {
     "InfoText": {
-        "y": "2",
-        "x": "0",
+        "y": "1850",
+        "x": "850",
         "Interval": "10",
         "widget_name": "GpuInfoText"
     },
     "Image": {
         "y": "5",
-        "x": "439",
+        "x": "550",
         "Interval": 6000,
         "widget_name": "Image"
     },
     "Bitcoin": {
-        "y": "1565",
-        "x": "0",
+        "y": "1860",
+        "x": "40",
         "Interval": 600,
         "widget_name": "Bitcoin",
         "Currency": "EUR"
     },
     "Mirror": {
-        "y": "100",
-        "x": "326",
+        "y": "1550",
+        "x": "780",
+	"width": 300,
         "Interval": 0.1,
         "widget_name": "Mirror"
     },
     "TimerText": {
-        "y": "448",
-        "x": "8",
+        "y": "50",
+        "x": "400",
         "Interval": 1,
         "widget_name": "TimerText"
     },
@@ -39,23 +40,12 @@
         "style": ""
     },
     "Calendar": {
-        "y": "200",
-        "x": "100",
-        "Interval": 6,
+        "y": "900",
+        "x": "40",
+        "Interval": 60,
         "widget_name": "Calendar",
-        "results": 3,
-        "api_key": "XXXXX",
-        "calendar": "de.german#holiday@group.v.calendar.google.com"
-    },
-    "Mail": {
-        "x": 250,
-        "y": 900,
-        "Interval": 600,
-        "server": "imap.server.example.de",
-        "port": 993,
-        "username": "user",
-        "password": "pass",
-        "results": 3,
-        "mailbox": "INBOX"
+        "results": 4,
+        "credentials_file": "./profiles/credentials_calendar.json",
+        "calendar": "nkjk3ajj8g7l6t9kcssivrhe3c@group.calendar.google.com"
     }
 }

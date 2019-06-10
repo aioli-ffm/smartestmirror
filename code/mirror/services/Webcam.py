@@ -36,6 +36,5 @@ class Webcam(Base):
             ret, self.image = self.capture.read()
             self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
 
-
     def currentImage(self):
         return self.image

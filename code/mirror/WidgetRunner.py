@@ -23,6 +23,7 @@ class WidgetRunner(object):
 
     def init(self, profile="./profiles/Default.json"):
 
+        self.serviceRunner.services["MotionSensor"].addCallback(self.callback)
         self.widgets = {}
         self.timers = []
 
@@ -52,7 +53,7 @@ class WidgetRunner(object):
                     class_ = getattr(mod, modname)
                     instance = class_(title=modname, parent=self.parent, serviceRunner=self.serviceRunner)
                     self.widgets[modname] = instance
-                except Exception,e:
+                except Exception as e:
                     print('module exception in '+ modname,e) 
                 #self.grid.addWidget(instance)
                 #self.parent.addWidget(instance)
@@ -75,6 +76,14 @@ class WidgetRunner(object):
                 widget.hide()
                 print("No position info for module %s"%widget)
                 print("[WidgetRunner] Exception: ", e)
+
+    def callback(self, isOn):
+        if isOn:
+            self.startWidgets()
+            print("[WidgetRunner] Start Widgets")
+        else:
+            self.stopWidgets()
+            print("[WidgetRunner] Stop Widgets")
 
     def startWidgets(self):
         for widget in self.widgets.values():

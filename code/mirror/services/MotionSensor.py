@@ -35,11 +35,12 @@ class MotionSensor(Base):
         """
         read the serial motion sensor, turn on and off the TV and the widget-timers
         """
-        res = 0
+        res = [0]
         while(self.ser.inWaiting() > 0):
             res = self.ser.readline()
+
         try:
-            if self.state == 1 and time.time() - self.last_move > 1 * 60:  # FIXME: hardcoded keep-on-time
+            if self.state == 1 and time.time() - self.last_move > self.config["keep_on_time"]:
                 self.execOff()
 
             if not "0" in res:

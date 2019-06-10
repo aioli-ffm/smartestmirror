@@ -34,7 +34,7 @@ class ServiceRunner(object):
                     class_ = getattr(mod, modname)
                     instance = class_(self)
                     self.services[modname] = instance
-                except Exception,e:
+                except Exception as e:
                     print('module exception in '+ modname,e)
 
     def configServices(self, profile="./profiles/DefaultServices.json"):
