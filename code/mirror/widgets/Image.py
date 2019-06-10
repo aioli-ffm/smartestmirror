@@ -61,7 +61,12 @@ class Image(QLabel,Base):
 	    dim = (width, int(h * r))
 
 	resized = cv2.resize(image, dim, interpolation = inter)
-	return resized
+        # now put the image in the lower-left
+        w = int(self.config['width'])
+        h = int(self.config['height'])
+        final_img = np.zeros((h, w,3), np.uint8)
+        final_img[h-resized.shape[0]:, w-resized.shape[1]:,:] = resized
+	return final_img
 
     def update(self):
         self.setimg(self.choose_image())

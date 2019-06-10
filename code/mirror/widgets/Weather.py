@@ -74,27 +74,32 @@ class Weather(QLabel, Base):
                 u'deg': 180}, 
             u'cod': 200}
         """
-        retstr = ""
-        retstr += "%s<br/>" % jo['name']
-        retstr += "%s &deg;C (%s/%s)<br/>" % (jo['main']['temp'], jo['main']['temp_min'], jo['main']['temp_max'])
-        retstr += "%s%% humid, %s mb<br/>" % (jo['main']['humidity'], jo['main']['pressure'])
+        try:
+            retstr = ""
+            retstr += "%s<br/>" % jo['name']
+            retstr += "%s &deg;C (%s/%s)<br/>" % (jo['main']['temp'], jo['main']['temp_min'], jo['main']['temp_max'])
+            retstr += "%s%% humid, %s mb<br/>" % (jo['main']['humidity'], jo['main']['pressure'])
 
 
-        # http://openweathermap.org/img/w/10d.png
-        assert(len(jo['weather']) == 1)
-        iconfname = jo['weather'][0]['icon'] + ".png" 
-        if not os.path.isfile(os.path.join(self.res_path , iconfname)):
-            self.logger.info("Downloading icon " + iconfname)
-            iconurl = "http://openweathermap.org/img/w/" + iconfname 
-            r = requests.get(iconurl)
+            # http://openweathermap.org/img/w/10d.png
+            assert(len(jo['weather']) == 1)
+            iconfname = jo['weather'][0]['icon'] + ".png" 
+            if not os.path.isfile(os.path.join(self.res_path , iconfname)):
+                self.logger.info("Downloading icon " + iconfname)
+                iconurl = "http://openweathermap.org/img/w/" + iconfname 
+                r = requests.get(iconurl)
 
-            with open(os.path.join(self.res_path, iconfname), 'wb') as f:  
-                    f.write(r.content)
+                with open(os.path.join(self.res_path, iconfname), 'wb') as f:  
+                        f.write(r.content)
 
-        self.logger.debug("Trying to open image with path: " + os.path.join(self.res_path, iconfname))
-        retstr +="<img src=\""+os.path.join(self.res_path, iconfname)+"\" /><br/>"
+            self.logger.debug("Trying to open image with path: " + os.path.join(self.res_path, iconfname))
+            retstr +="<img src=\""+os.path.join(self.res_path, iconfname)+"\" /><br/>"
 
-        retstr += "%s - %s" % (jo['weather'][0]['main'], jo['weather'][0]['description'])
+            retstr += "%s - %s" % (jo['weather'][0]['main'], jo['weather'][0]['description'])
+        except Exception, e:
+            self.logger.error(e)
+            self.logger.error(jo)
+            retstr = "N/A"
 
         return retstr
 

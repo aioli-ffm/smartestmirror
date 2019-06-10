@@ -25,13 +25,8 @@ class Mirror(QLabel,Base):
         self.parent = parent
         self.downloadHaarcascade()
         self.detectFace = True
-        self.zoomFace = True
         if self.detectFace:
             self.face_cascade = cv2.CascadeClassifier('./supplementary/haarcascade_frontalface_default.xml')
-        self.serviceRunner.get("SpeechCommands").addCallback("on", self.command_callback)
-
-    def command_callback(self, _):
-        self.zoomFace = not self.zoomFace
 
     def downloadHaarcascade(self):
         import urllib
@@ -57,40 +52,14 @@ class Mirror(QLabel,Base):
             if self.detectFace:
                 faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
 
-            if len(faces) == 0:
-                # scale for width
-                new_height = int(img.shape[0] / (img.shape[1]/float(self.config["width"])))
-       	        # resize for display
-                mirror_color = cv2.resize(mirror_color, (self.config["width"], new_height)) 
-                self.setimg(mirror_color) # show img if no face is found
+            for (x,y,w,h) in faces:
+                cv2.rectangle(mirror_color, (x,y),(x+w,y+h),(255,0,255),4)
 
-            if self.zoomFace and self.detectFace:
-		new_img = np.zeros((img.shape[0], img.shape[1], 3), np.uint8)
-                # calc width for single pics
-                if len(faces) > 0:
-			single_width = int(self.config["width"]/float(len(faces)))
-                        idx = 0
-			for (x,y,w,h) in faces:
-			    roi_color = mirror_color[y:y+h, x:x+w]
-			    height, width = mirror_color.shape[:2]
+            # scale for width
+            new_height = int(img.shape[0] / (img.shape[1]/float(self.config["width"])))
+            # resize for display
+            mirror_color = cv2.resize(mirror_color, (self.config["width"], new_height)) 
+            self.setimg(mirror_color) # show img if no face is found
 
-			    new_height = int(roi_color.shape[0] / (roi_color.shape[1]/float(single_width)))
-
-                            # if its too large, rescale other dim also
-                            if new_height > new_img.shape[0]:
-                                new_width = int(roi_color.shape[1] / (roi_color.shape[0]/float(new_img.shape[0])))
-			        zoomed_color = cv2.resize(roi_color,(new_width, new_img.shape[0]), interpolation = cv2.INTER_CUBIC)
-                                new_img[:zoomed_color.shape[0],
-                                        idx*single_width:idx*single_width+new_width,
-                                        :] = zoomed_color
-                            else:
-			        zoomed_color = cv2.resize(roi_color,(single_width, new_height), interpolation = cv2.INTER_CUBIC)
-                                new_img[:zoomed_color.shape[0],
-                                        idx*single_width:(idx+1)*single_width,
-                                        :] = zoomed_color
-
-			    #zoomed_color = cv2.resize(roi_color,(height, height), interpolation = cv2.INTER_CUBIC)
-                            idx += 1
-		        self.setimg(new_img)
         else:
             self.logger.warn("Image is None")
