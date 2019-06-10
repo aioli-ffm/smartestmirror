@@ -3,7 +3,7 @@
 author: Christian M
 '''
 from abc import abstractmethod
-#from Configurateable import *
+import logging
 
 class Base(object):
 

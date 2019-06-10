@@ -5,6 +5,7 @@ author: Christian M
 from __future__ import print_function, unicode_literals
 import httplib2
 import os
+import logging
 from apiclient import discovery
 from oauth2client import client, tools, file
 from httplib2 import Http
@@ -42,6 +43,7 @@ class Calendar(QLabel, Base):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAlignment(Qt.AlignLeft)
         self.setStyleSheet("color: rgb(255,255,255);")
+        self.logger = logging.getLogger(__name__)
 
     def defaultConfig(self):
         return {"x": 50, "y": 900, "Interval": 10, "credentials_file": "./profiles/credentials_calendar.json", "calendar": "primary", "results": 3}
@@ -56,12 +58,12 @@ class Calendar(QLabel, Base):
                 creds = tools.run_flow(flow, store)
             self.service = discovery.build('calendar', 'v3', http=creds.authorize(Http()))
         except Exception, e:
-            print('[Exception Calendar Widget', e)
+            self.logger.error(e)
 
     def settext(self, text):
         self.setText(text)
-        newfont = QFont("Times", 14, QFont.Bold)
-        self.setFont(newfont)
+        #newfont = QFont("Times", 14, QFont.Bold)
+        #self.setFont(newfont)
 
         f = self.font()
         m = QFontMetrics(f)
@@ -94,7 +96,7 @@ class Calendar(QLabel, Base):
 
             self.setevents(events)
         except Exception, e:
-            print('[Exception Calendar Widget', e)
+            self.logger.error(e)
 
     def update(self):
         self.labeltext = ''

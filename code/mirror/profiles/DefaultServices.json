@@ -11,7 +11,7 @@
     "MotionSensor": {
         "y": 0,
         "x": 0,
-        "Interval": 0.1,
+        "Interval": 0.25,
         "keep_on_time": 60
     },
     "TTS": {

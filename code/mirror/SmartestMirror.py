@@ -1,9 +1,10 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 '''
 author: Christian M
 '''
 import sys
+import logging.config
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -11,11 +12,16 @@ import ServiceRunner
 import WidgetRunner
 import ProfileManager
 
-
 class SmartestMirror(QWidget):
     def __init__(self):
         super(SmartestMirror, self).__init__()
         self.initUI()
+
+        # configure logging and disable other annoying modules
+        logging.config.fileConfig('profiles/logging.ini')
+        logging.getLogger(__name__).info("SmartestMirror started")
+        logging.getLogger("requests").setLevel(logging.WARNING)
+        logging.getLogger("googleapiclient").propagate = False
 
         self.serviceRunner = ServiceRunner.ServiceRunner()
         self.widgetRunner = WidgetRunner.WidgetRunner(self, self.serviceRunner)

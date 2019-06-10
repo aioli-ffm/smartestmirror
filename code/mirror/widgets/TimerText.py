@@ -23,7 +23,7 @@ class TimerText(QLabel,Base):
 
     def settext(self,text):
         self.setText(text)
-        newfont = QFont("Times", 22, QFont.Bold) 
+        newfont = QFont("Helvetica", 22) 
         self.setFont(newfont)
 
         f = self.font()
@@ -39,5 +39,6 @@ class TimerText(QLabel,Base):
         wday = calendar.day_name[datetime.datetime.today().weekday()]
         # create a pretty datestring
         dstr = '%02d.%02d.%04d' % (now.day, now.month, now.year)
-        self.settext(tstr+"\n"+wday+", "+dstr)
+        #self.settext(tstr+"\n"+wday+", "+dstr)
+        self.settext(tstr+" "+wday+", "+dstr)
 

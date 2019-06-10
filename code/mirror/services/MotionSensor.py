@@ -4,6 +4,7 @@ author: Christian M
 '''
 import serial
 import time
+import logging
 from services.Base import *
 
 
@@ -12,6 +13,7 @@ class MotionSensor(Base):
     def __init__(self, serviceRunner):
         super(MotionSensor, self).__init__()
         self.serviceRunner = serviceRunner
+        self.logger = logging.getLogger(__name__)
 
     def init(self):
         self.last_move = time.time()
@@ -23,7 +25,7 @@ class MotionSensor(Base):
             self.ser.open()
             self.open = True
         except:
-            print("Serial port not usable")
+            self.logger.error("Serial port not usable")
             self.open = False
         self.callbacks = []
 
@@ -35,31 +37,30 @@ class MotionSensor(Base):
         """
         read the serial motion sensor, turn on and off the TV and the widget-timers
         """
-        res = [0]
+        res = 0
         while(self.ser.inWaiting() > 0):
-            res = self.ser.readline()
+            res = self.ser.readline().strip()
 
         try:
             if self.state == 1 and time.time() - self.last_move > self.config["keep_on_time"]:
                 self.execOff()
 
-            if not "0" in res:
-                print("Movement detected")
+            if res == "1":
                 self.last_move = time.time()
 
-            if "0" not in res and self.state == 0:
+            if res == "1" and self.state == 0:
                 self.execOn()
         except Exception as e:
-            print("[Motionsensor] Exception: ", e)
+            self.logger.error(e)
 
     def execOn(self):
-        print("----Motionsensing: Turning TV on")
+        self.logger.info("Motionsensing: Turning TV on")
         self.state = 1
         for callback in self.callbacks:
             callback(self.state)
 
     def execOff(self):
-        print("----Motionsensing: Turning TV off")
+        self.logger.info("Motionsensing: Turning TV off")
         self.state = 0
         for callback in self.callbacks:
             callback(self.state)

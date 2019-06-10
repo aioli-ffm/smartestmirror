@@ -2,13 +2,15 @@
 '''
 author: Christian M
 '''
-import services
-import Config
-
+import logging
 from PyQt5.QtCore import *
 
 import importlib
 import pkgutil
+
+import services
+import Config
+
 
 class ServiceRunner(object):
 
@@ -16,6 +18,7 @@ class ServiceRunner(object):
         self.config = Config.Config()
         self.services = {}
         self.timers = []
+        self.logger = logging.getLogger(__name__)
 
     def init(self, parent, widgetRunner):
         self.parent = parent
@@ -28,14 +31,15 @@ class ServiceRunner(object):
     def loadServices(self):
         for importer,modname,ispkg in pkgutil.iter_modules(services.__path__):
             if modname != "Base":
-                print("Found service %s" % modname)
+                self.logger.debug("Found service %s" % modname)
                 try:
                     mod = importlib.import_module("services."+modname)
                     class_ = getattr(mod, modname)
                     instance = class_(self)
                     self.services[modname] = instance
                 except Exception as e:
-                    print('module exception in '+ modname,e)
+                    self.logger.error('module exception in %s'% modname)
+                    self.logger.error(e)
 
     def configServices(self, profile="./profiles/DefaultServices.json"):
         self.config.load(self.services.values(), profile)

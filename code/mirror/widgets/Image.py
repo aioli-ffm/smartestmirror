@@ -6,9 +6,11 @@ author: Tobias Weis
 from PyQt5.QtWidgets import * 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import datetime
-import calendar
 import cv2
+import os
+import glob
+import logging
+import random
 import numpy as np
 from widgets.Base import *
 
@@ -19,6 +21,20 @@ class Image(QLabel,Base):
     def __init__(self, title, parent, serviceRunner):
         super(Image,self).__init__(title,parent)
         self.parent = parent
+        self.logger = logging.getLogger(__name__)
+
+    def choose_image(self):
+        extensions = ['*.png', '*.jpg']
+        image_dir = os.path.join(self.res_path, "slideshow_images")
+        # parse directory of images and select one randomly
+        img_list = []
+        for ext in extensions:
+            for fname in glob.glob(image_dir + "/" + ext):
+                img_list.append(fname)
+        self.logger.debug("Found %d image files in directory %s" % (len(img_list), image_dir))
+        chosen_fname = random.choice(img_list)
+        self.logger.debug("Chose " + chosen_fname)
+        return cv2.cvtColor(self.image_resize(cv2.imread(chosen_fname)), cv2.COLOR_BGR2RGB)
 
     def setimg(self,img):
         img = np.require(img, np.uint8, 'C')
@@ -26,8 +42,26 @@ class Image(QLabel,Base):
         pixmap = QPixmap.fromImage(qimg)
         self.setPixmap(pixmap)
 
+    def image_resize(self, image, inter = cv2.INTER_AREA):
+	dim = None
+	(h, w) = image.shape[:2]
+
+	if h > w:
+            height = int(self.config['height'])
+            width = None
+        else:
+            width = int(self.config['width'])
+            height = None
+
+	if width is None:
+	    r = height / float(h)
+	    dim = (int(w * r), height)
+	else:
+	    r = width / float(w)
+	    dim = (width, int(h * r))
+
+	resized = cv2.resize(image, dim, interpolation = inter)
+	return resized
+
     def update(self):
-        # create a pretty timestring
-        #img = np.zeros((100,200,3), np.uint8) + [255,255,255]
-        img = cv2.imread("brain.jpg")
-        self.setimg(img)
+        self.setimg(self.choose_image())

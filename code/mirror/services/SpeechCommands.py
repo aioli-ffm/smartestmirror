@@ -6,6 +6,7 @@ import serial
 import time
 import os
 import zipfile
+import logging
 from services.Base import *
 import speech_recognition as sr
 
@@ -22,11 +23,12 @@ class SpeechCommands(Base):
         self.callbacks = {}
         self.config = self.defaultConfig()
         self.downloadmodel()
+        self.logger = logging.getLogger(__name__)
 
     def downloadmodel(self):
         import urllib
         if not os.path.isfile("./supplementary/" + self.modelfile):
-            print("Downloading Speech Commands model")
+            self.logger.info("Downloading Speech Commands model")
             testfile = urllib.URLopener()
             testfile.retrieve(
                 self.modelurl, "./supplementary/" + self.modelfile)
@@ -53,11 +55,11 @@ class SpeechCommands(Base):
             labels = "./supplementary/" + str(self.config["labels"])
             spoken = recognizer.recognize_tensorflow(
                 audio, tensor_graph=graph, tensor_label=labels)
-            print(spoken)
+            self.logger.debug(spoken)
         except sr.UnknownValueError:
-            print("Tensorflow could not understand audio")
+            self.logger.debug("Tensorflow could not understand audio")
         except sr.RequestError as e:
-            print(
+            self.logger.error(
                 "Could not request results from Tensorflow service; {0}".format(e))
 
     def executeCallbacks(self, command):
@@ -67,9 +69,9 @@ class SpeechCommands(Base):
                 try:
                     callback(command)
                 except Exception as e:
-                    print(e)
+                    self.logger.error(e)
         except Exception as e:
-            print(e)
+            self.logger.error(e)
 
     def addCallback(self, command, callback):
         callbacklist = []

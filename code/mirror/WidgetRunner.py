@@ -2,14 +2,17 @@
 '''
 author: Christian M
 '''
-import widgets
-import Config
+import os
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QGridLayout, QLayout
 
 import importlib
 import pkgutil
+import logging
+
+import widgets
+import Config
 
 class WidgetRunner(object):
 
@@ -17,12 +20,9 @@ class WidgetRunner(object):
         self.serviceRunner = serviceRunner
         self.parent = parent
         self.config = Config.Config()
-        #self.grid = QGridLayout()
-        #self.parent.setLayout(self.grid)
-
+        self.logger = logging.getLogger(__name__)
 
     def init(self, profile="./profiles/Default.json"):
-
         self.serviceRunner.services["MotionSensor"].addCallback(self.callback)
         self.widgets = {}
         self.timers = []
@@ -47,16 +47,15 @@ class WidgetRunner(object):
     def loadWidgets(self):
         for importer,modname,ispkg in pkgutil.iter_modules(widgets.__path__):
             if modname != "Base":
-                print("Found widget %s" % modname)
+                self.logger.debug("Found widget %s" % modname)
                 try:
                     mod = importlib.import_module("widgets."+modname)
                     class_ = getattr(mod, modname)
                     instance = class_(title=modname, parent=self.parent, serviceRunner=self.serviceRunner)
                     self.widgets[modname] = instance
                 except Exception as e:
-                    print('module exception in '+ modname,e) 
-                #self.grid.addWidget(instance)
-                #self.parent.addWidget(instance)
+                    self.logger.error('module exception in '+ modname) 
+                    self.logger.error(e)
 
     def configWidgets(self):
         self.config.load(self.widgets.values(), self.profile)
@@ -67,6 +66,8 @@ class WidgetRunner(object):
                 widget.hide()
                 continue
             widget.init()
+            widget.res_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources')
+
             try:
                 widget.move(
                         int(widget.config["x"]), 
@@ -74,21 +75,21 @@ class WidgetRunner(object):
                         )
             except Exception as e:
                 widget.hide()
-                print("No position info for module %s"%widget)
-                print("[WidgetRunner] Exception: ", e)
+                self.logger.warn("No position info for module %s"%widget)
+                self.logger.warn(e)
 
     def callback(self, isOn):
         if isOn:
             self.startWidgets()
-            print("[WidgetRunner] Start Widgets")
+            self.logger.info("Start Widgets")
         else:
             self.stopWidgets()
-            print("[WidgetRunner] Stop Widgets")
+            self.logger.info("Stop Widgets")
 
     def startWidgets(self):
         for widget in self.widgets.values():
             if not self.config.isEnabled(widget,self.profile):
-                print("Widget not enabled: ", widget)
+                self.logger.debug("Widget not enabled: %s" % widget)
                 continue
             # setup the update functions
             timer = QTimer()

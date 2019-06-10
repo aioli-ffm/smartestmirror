@@ -12,6 +12,7 @@ import numpy as np
 from widgets.Base import *
 import time
 import os
+import logging
 
 class Mirror(QLabel,Base):
     """
@@ -19,6 +20,7 @@ class Mirror(QLabel,Base):
     """
     def __init__(self, title, parent, serviceRunner):
         super(Mirror,self).__init__(title,parent)
+        self.logger = logging.getLogger(__name__)
         self.serviceRunner = serviceRunner
         self.parent = parent
         self.downloadHaarcascade()
@@ -34,7 +36,7 @@ class Mirror(QLabel,Base):
     def downloadHaarcascade(self):
         import urllib
         if not os.path.isfile("./supplementary/haarcascade_frontalface_default.xml"): 
-            print("Downloading Haarcascade")
+            self.logger.info("Downloading Haarcascade")
             testfile = urllib.URLopener()
             testfile.retrieve("https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_default.xml", "./supplementary/haarcascade_frontalface_default.xml")
 
@@ -67,21 +69,16 @@ class Mirror(QLabel,Base):
                 # calc width for single pics
                 if len(faces) > 0:
 			single_width = int(self.config["width"]/float(len(faces)))
-                        #print("[Mirror] ----------------------- Length faces: ", len(faces))
-                        #print("[Mirror] Single width: ", single_width)
                         idx = 0
 			for (x,y,w,h) in faces:
-                            #print("[Mirror]--- idx: ", idx)
 			    roi_color = mirror_color[y:y+h, x:x+w]
 			    height, width = mirror_color.shape[:2]
 
 			    new_height = int(roi_color.shape[0] / (roi_color.shape[1]/float(single_width)))
-                            #print("[Mirror] New height: ", new_height)
 
                             # if its too large, rescale other dim also
                             if new_height > new_img.shape[0]:
                                 new_width = int(roi_color.shape[1] / (roi_color.shape[0]/float(new_img.shape[0])))
-                                #print("[Mirror] New width: ", new_width)
 			        zoomed_color = cv2.resize(roi_color,(new_width, new_img.shape[0]), interpolation = cv2.INTER_CUBIC)
                                 new_img[:zoomed_color.shape[0],
                                         idx*single_width:idx*single_width+new_width,
@@ -93,8 +90,7 @@ class Mirror(QLabel,Base):
                                         :] = zoomed_color
 
 			    #zoomed_color = cv2.resize(roi_color,(height, height), interpolation = cv2.INTER_CUBIC)
-                            #print("[Mirror] Dim zoomed_color: ", zoomed_color.shape)
                             idx += 1
 		        self.setimg(new_img)
         else:
-            print("Image is None")
+            self.logger.warn("Image is None")

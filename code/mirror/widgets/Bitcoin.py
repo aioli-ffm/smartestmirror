@@ -28,8 +28,6 @@ class Bitcoin(QLabel, Base):
 
     def settext(self,text):
         self.setText(text)
-        newfont = QFont("Times", 22, QFont.Bold) 
-        self.setFont(newfont)
 
         f = self.font()
         m = QFontMetrics(f)

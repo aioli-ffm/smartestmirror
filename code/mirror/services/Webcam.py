@@ -4,12 +4,14 @@ author: Christian M
 '''
 import cv2
 import numpy as np
+import logging
 from services.Base import *
 
 class Webcam(Base):
 
     def __init__(self, serviceRunner):
         super(Webcam, self).__init__()
+        self.logger = logging.getLogger(__name__)
         self.serviceRunner = serviceRunner
         self.config = self.defaultConfig()
         self.image = None
@@ -20,7 +22,7 @@ class Webcam(Base):
     def init(self):
         self.capture = cv2.VideoCapture(self.config['device'])
         if not self.capture.isOpened():
-            print("Could not open camera ", self.config['device'])
+            self.logger.error("Could not open camera ", self.config['device'])
             img = np.zeros((self.config["resy"], self.config["resx"], 3), np.uint8)
             img += np.array([0,255,0], np.uint8)
             cv2.putText(img, 'No image, device %d'%(self.config["device"]), (10,self.config["resy"]/2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0),1)

@@ -2,27 +2,29 @@
 '''
 author: Tobias Weis
 '''
-from .Net import *
 import os.path
+import logging
 import cv2
 import numpy as np
 import time
+from .Net import *
 
 
 class Predictor:
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
         self.model = Net()
         if not os.path.isfile("./supplementary/FACENET.pth"):
-            print("===========================")
-            print(" could not find trained FACENET.pth")
-            print("===========================")
+            self.logger.warn("===========================")
+            self.logger.warn(" could not find trained FACENET.pth")
+            self.logger.warn("===========================")
         self.model.load_state_dict(torch.load('./supplementary/FACENET.pth'))
         self.model.eval()
 
         if not os.path.isfile("./supplementary/haarcascade_frontalface_default.xml"):
-            print("===========================")
-            print(" could not find haarcascade_frontalface_default.xml")
-            print("===========================")
+            self.logger.error("===========================")
+            self.logger.error(" could not find haarcascade_frontalface_default.xml")
+            self.logger.error("===========================")
 
         cascPath = "./supplementary/haarcascade_frontalface_default.xml"
         self.faceCascade = cv2.CascadeClassifier(cascPath)

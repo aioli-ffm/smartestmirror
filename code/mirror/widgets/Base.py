@@ -3,6 +3,7 @@
 author: Tobias Weis, Christian M
 '''
 from abc import abstractmethod
+import logging
 #from Configurateable import *
 
 from PyQt5.QtWidgets import * 
@@ -13,7 +14,9 @@ class Base(object):
     def __init__(self):
         super(Base, self).__init__()
         self.serviceRunner = None
+        self.res_path = None #resources-directory
         self.config = {}
+        self.logger = logging.getLogger(__name__)
 
     @classmethod
     @abstractmethod

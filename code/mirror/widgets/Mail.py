@@ -5,6 +5,7 @@ author: Christian M
 from __future__ import print_function, unicode_literals
 import httplib2
 import os
+import logging
 import imaplib
 import email, email.Header
 from apiclient import discovery
@@ -46,6 +47,7 @@ class Mail(QLabel, Base):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setAlignment(Qt.AlignCenter)
         self.setStyleSheet("color: rgb(255,255,255);")
+        self.logger = logging.getLogger(__name__)
 
     def defaultConfig(self):
         return {"x": 50, "y": 900, "Interval": 10, "server": "localhost", "port": 993, "username":"username", "password":"password", "results": 3, "mailbox":"Inbox"}
@@ -56,7 +58,7 @@ class Mail(QLabel, Base):
             self.mail_service.login(self.config["username"], self.config["password"])
             self.mail_service.select(self.config["mailbox"])
         except Exception, e:
-            print('exception in login', e)
+            self.logger.error(e)
 
     def settext(self, text):
         self.setText(text)
@@ -100,7 +102,7 @@ class Mail(QLabel, Base):
                         mails.append(subject)
             self.setmails(mails)
         except Exception, e:
-            print('[Exception Mail Widget] ', e)
+            self.logger.error(e)
 
     def update(self):
         self.labeltext = ''
