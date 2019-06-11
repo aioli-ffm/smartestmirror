@@ -74,6 +74,7 @@ class Weather(QLabel, Base):
                 u'deg': 180}, 
             u'cod': 200}
         """
+        self.logger.debug(jo)
         try:
             retstr = ""
             retstr += "%s<br/>" % jo['name']
@@ -82,20 +83,24 @@ class Weather(QLabel, Base):
 
 
             # http://openweathermap.org/img/w/10d.png
-            assert(len(jo['weather']) == 1)
-            iconfname = jo['weather'][0]['icon'] + ".png" 
-            if not os.path.isfile(os.path.join(self.res_path , iconfname)):
-                self.logger.info("Downloading icon " + iconfname)
-                iconurl = "http://openweathermap.org/img/w/" + iconfname 
-                r = requests.get(iconurl)
+            for weather in jo['weather']:
+                iconfname = weather['icon'] + ".png"
 
-                with open(os.path.join(self.res_path, iconfname), 'wb') as f:  
-                        f.write(r.content)
+                if not os.path.isfile(os.path.join(self.res_path , iconfname)):
+                    self.logger.info("Downloading icon " + iconfname)
+                    iconurl = "http://openweathermap.org/img/w/" + iconfname 
+                    r = requests.get(iconurl)
 
-            self.logger.debug("Trying to open image with path: " + os.path.join(self.res_path, iconfname))
-            retstr +="<img src=\""+os.path.join(self.res_path, iconfname)+"\" /><br/>"
+                    with open(os.path.join(self.res_path, iconfname), 'wb') as f:  
+                            f.write(r.content)
 
-            retstr += "%s - %s" % (jo['weather'][0]['main'], jo['weather'][0]['description'])
+                self.logger.debug("Trying to open image with path: " + os.path.join(self.res_path, iconfname))
+                retstr +="<img src=\""+os.path.join(self.res_path, iconfname)+"\" style=\"float:left;\"/>"
+
+            retstr += "<br/>"
+
+            for weather in jo['weather']:
+                retstr += "%s - %s<br/>" % (weather['main'], weather['description'])
         except Exception, e:
             self.logger.error(e)
             self.logger.error(jo)
