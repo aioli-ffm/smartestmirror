@@ -30,8 +30,11 @@ class Weather(QLabel, Base):
 
     def get_weather(self):
         url = "https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}".format(self.config["location"], self.config["api_key"])
-        r = requests.get(url)
-        return r.json()
+        try:
+            r = requests.get(url)
+            return r.json()
+        except:
+            return ""
 
     def parse_weather(self, jo):
         """

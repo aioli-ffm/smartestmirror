@@ -35,10 +35,13 @@ class Bitcoin(QLabel, Base):
         self.setFixedSize(size.width(), size.height())
 
     def update(self):
-        r = requests.get('https://api.coindesk.com/v1/bpi/currentprice.json')
+        try:
+            r = requests.get('https://api.coindesk.com/v1/bpi/currentprice.json')
 
-        updated = r.json()['time']['updated']
-        price = r.json()['bpi'][self.config["Currency"]]['rate_float']
+            updated = r.json()['time']['updated']
+            price = r.json()['bpi'][self.config["Currency"]]['rate_float']
 
-        dstr = "%.2f EUR (%s)" % (price, updated)
-        self.settext(dstr)
+            dstr = "%.2f EUR (%s)" % (price, updated)
+            self.settext(dstr)
+        except Exception, e:
+            pass
